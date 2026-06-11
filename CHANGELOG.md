@@ -5,6 +5,17 @@ All notable changes to StarEditor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.1] - 2026-06-11
+
+### Summary
+
+| Category | Description                                                                              |
+|----------|------------------------------------------------------------------------------------------|
+| Fixed    | Pasting text into an empty editor now correctly wraps the first paragraph in `<p>` tags |
+
+### Fixed
+- Pasting text into an empty editor via Ctrl+V no longer leaves the first paragraph as unwrapped bare text — all pasted content is now consistently wrapped in `<p>` elements without manual intervention in the source editor.
+
 ## [2.7.0] - 2026-05-23
 
 ### Summary

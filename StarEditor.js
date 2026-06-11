@@ -5,7 +5,7 @@
  * using native browser APIs (contenteditable, execCommand).
  *
  * @package StarEditor
- * @version 2.7.0
+ * @version 2.7.1
  * @license MIT
  */
 class StarEditor {
@@ -3901,10 +3901,31 @@ class StarEditor {
     }
 
     /**
-     * Normalize content - convert div tags to p tags for consistency
+     * Normalize content - convert div tags to p tags for consistency, and wrap
+     * bare text/inline nodes at the editor root into paragraph elements.
      * @private
      */
     normalizeContent() {
+        // Wrap bare text nodes and inline elements that sit directly inside the
+        // editor root into <p> elements (happens when pasting into an empty editor).
+        const blockTags = new Set(['P','DIV','H1','H2','H3','H4','H5','H6','UL','OL','BLOCKQUOTE','PRE','TABLE','FIGURE','HR']);
+        let group = [];
+        const flushGroup = () => {
+            if (!group.length) return;
+            const p = document.createElement('p');
+            group[0].before(p);
+            group.forEach(n => p.appendChild(n));
+            group = [];
+        };
+        [...this.editor.childNodes].forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE || (node.nodeType === Node.ELEMENT_NODE && !blockTags.has(node.tagName))) {
+                group.push(node);
+            } else {
+                flushGroup();
+            }
+        });
+        flushGroup();
+
         let changed = true;
         let iterations = 0;
         const maxIterations = 10;
