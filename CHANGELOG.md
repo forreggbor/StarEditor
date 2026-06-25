@@ -5,6 +5,21 @@ All notable changes to StarEditor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2026-06-25
+
+### Summary
+
+| Category | Description                                                                    |
+|----------|--------------------------------------------------------------------------------|
+| Added    | `onImageUpload` callback to handle server-side file uploads instead of base64  |
+| Fixed    | Tall modals no longer overflow the viewport — body scrolls within 90vh limit   |
+
+### Added
+- **`onImageUpload(file, alt, done)` callback**: optional hook called when the user selects a file in the Upload tab. The host application uploads the file and calls `done(url, serverItem?)` to insert the result. When not configured, the editor falls back to inserting a base64 data URI directly.
+
+### Fixed
+- Modal dialogs are now capped at 90% of the viewport height and scroll their content area, so large pickers (gallery, server images) no longer extend off-screen on smaller displays.
+
 ## [2.7.1] - 2026-06-11
 
 ### Summary

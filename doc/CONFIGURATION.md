@@ -41,6 +41,7 @@ const editor = new StarEditor(document.getElementById('content'), {
     onChange: function(html) { /* … */ },
     onFocus: function() { /* … */ },
     onBlur: function() { /* … */ },
+    onImageUpload: function(file, alt, done) { done('/uploads/image.jpg'); },
     onImageInsert: function({ url, alt, source, serverItem }) { /* … */ },
     onGalleryInsert: function({ gallery, source }) { /* … */ },
     onContentIn: function(html) { return html; },
@@ -73,6 +74,7 @@ const editor = new StarEditor(document.getElementById('content'), {
 | `onChange` | Function | `null` | Called with the current HTML whenever content changes |
 | `onFocus` | Function | `null` | Called when the editor gains focus |
 | `onBlur` | Function | `null` | Called when the editor loses focus |
+| `onImageUpload` | Function | `null` | Hook called when the user selects a file to upload. Receives `(file, alt, done)` — call `done(url, serverItem?)` to insert the image. Falls back to base64 when not set. |
 | `onImageInsert` | Function | `null` | Hook called before every image insertion. See [Images & Galleries](IMAGES-AND-GALLERIES.md). |
 | `onGalleryInsert` | Function | `null` | Hook called when the user picks a gallery. See [Images & Galleries](IMAGES-AND-GALLERIES.md). |
 | `onContentIn` | Function | `null` | Transform applied on load: host storage → editor DOM. Register as a pair with `onContentOut`. |

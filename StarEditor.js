@@ -5,7 +5,7 @@
  * using native browser APIs (contenteditable, execCommand).
  *
  * @package StarEditor
- * @version 2.7.1
+ * @version 2.8.0
  * @license MIT
  */
 class StarEditor {
@@ -70,7 +70,8 @@ class StarEditor {
         serverGalleriesPageSize: 12,
         onGalleryInsert: null,
         onContentIn: null,
-        onContentOut: null
+        onContentOut: null,
+        onImageUpload: null
     };
 
     /**
@@ -621,20 +622,29 @@ class StarEditor {
             padding: 20px;
             min-width: 300px;
             max-width: 90vw;
+            max-height: 90vh;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
         .star-modal-header {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 16px;
+            flex-shrink: 0;
         }
         .star-modal-body {
             margin-bottom: 16px;
+            flex: 1 1 auto;
+            overflow-y: auto;
+            min-height: 0;
         }
         .star-modal-footer {
             display: flex;
             justify-content: flex-end;
             gap: 8px;
+            flex-shrink: 0;
         }
         .star-modal-row {
             margin-bottom: 12px;
@@ -2206,7 +2216,11 @@ class StarEditor {
     }
 
     /**
-     * Insert an image from a file (converts to base64 data URL).
+     * Insert an image from a file.
+     *
+     * When onImageUpload is configured, delegates to that callback so the host
+     * application can upload the file to a server and insert a permanent URL.
+     * Falls back to a base64 data URI when no upload handler is provided.
      *
      * @param {File} file - The image file
      * @param {string} alt - The alt text
@@ -2220,6 +2234,13 @@ class StarEditor {
         if (file.size > this.config.maxImageSize) {
             const maxMB = Math.round(this.config.maxImageSize / 1024 / 1024);
             alert(this.t('alert.imageTooLarge') + maxMB + 'MB');
+            return;
+        }
+
+        if (typeof this.config.onImageUpload === 'function') {
+            this.config.onImageUpload(file, alt, (url, serverItem) => {
+                this._insertImage(url, alt, 'upload', serverItem ?? null);
+            });
             return;
         }
 

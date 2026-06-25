@@ -1,8 +1,9 @@
 # Images and Galleries — Integration Guide
 
-This guide covers every image- and gallery-related feature added in v2.5.0–v2.7.0:
+This guide covers every image- and gallery-related feature added in v2.5.0–v2.8.0:
 
 - [Server image gallery](#server-image-gallery) (`serverImages`, `serverImagesPageSize`)
+- [File upload hook](#file-upload-hook) (`onImageUpload`)
 - [Image insert hook](#image-insert-hook) (`onImageInsert`)
 - [Public insert API](#public-insert-api) (`insertImageFromUrl`)
 - [Gallery picker](#gallery-picker) (`serverGalleries`, `serverGalleriesPageSize`, `onGalleryInsert`)
@@ -146,6 +147,40 @@ new StarEditor('#content', {
 ```
 
 Folder paths are inferred from `url`: everything before the last `/` is the folder. Items with no `/` in their URL belong to the root.
+
+---
+
+## File upload hook
+
+`onImageUpload` lets you handle the Upload tab's file on the server instead of storing it as a base64 data URI. When the callback is set, the editor calls it with the selected file and waits for a URL; when it is not set, the editor falls back to base64.
+
+### Signature
+
+```javascript
+onImageUpload: function(file, alt, done) {
+    // file — the File object selected by the user
+    // alt  — alt text entered in the modal (may be empty)
+    // done(url, serverItem?) — call this when the upload is complete
+}
+```
+
+The third argument `done` is an editor-provided callback. Call it with the uploaded URL to insert the image at the cursor. Optionally pass a `serverItem` object as the second argument — it will be forwarded to `onImageInsert` if that hook is also configured.
+
+### Example — POST to a server endpoint
+
+```javascript
+StarEditor.create('textarea', {
+    onImageUpload(file, alt, done) {
+        const form = new FormData();
+        form.append('image', file);
+        fetch('/upload/image', { method: 'POST', body: form })
+            .then(r => r.json())
+            .then(data => done(data.url));
+    }
+});
+```
+
+If `done` is never called, the editor does nothing — you are responsible for user feedback inside the callback.
 
 ---
 
@@ -571,7 +606,7 @@ function escHtmlAttr(str) { return escHtml(str); }
 - **Validate `folder` parameter.** Reject any value containing `..` or path-separator sequences before constructing a filesystem path.
 - **Sanitize HTML server-side.** `onContentOut` produces the HTML that gets saved. Always run a server-side HTML sanitiser (e.g. HTMLPurifier) before storing editor output in the database. The editor's client-side sanitization is for display only.
 - **`onContentIn` receives database content.** If your shortcodes contain user-supplied values (e.g., a gallery name embedded in the shortcode), escape them when building placeholder HTML — do not inject them raw into innerHTML.
-- **File upload (base64).** The Upload tab encodes the selected file as a base64 data URI and inserts it directly into the editor DOM. It never sends the file to the server. If you need server-side file storage, use `onImageInsert` with `source === 'upload'` to intercept the data URI and POST it yourself.
+- **File upload.** When `onImageUpload` is not set, the Upload tab encodes the selected file as a base64 data URI and inserts it directly into the editor DOM — no server request is made. When `onImageUpload` is configured, the callback is responsible for POSTing the file to the server and returning the resulting URL; validate the returned URL server-side before storage.
 
 ---
 
@@ -582,3 +617,4 @@ function escHtmlAttr(str) { return escHtml(str); }
 | v2.5.0  | Server image gallery with pagination, search, folder navigation, wide modal                  |
 | v2.6.0  | `onImageInsert` callback; `serverItem` passthrough; `insertImageFromUrl` `options` parameter |
 | v2.7.0  | `serverGalleries`, `onGalleryInsert`, `onContentIn`, `onContentOut`, gallery picker modal    |
+| v2.8.0  | `onImageUpload` callback for server-side file upload; modal viewport-height cap with scroll  |
