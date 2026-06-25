@@ -1,0 +1,79 @@
+name: "Issue"
+about: "Report a bug, propose a feature, or open a question"
+title: ""
+ref: "master"
+assignees:
+  - gabor
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **English only.** Behaviour-level descriptions; link doc paths or file paths instead of pasting large code blocks.
+
+        **Apply a kind label** from the sidebar after creating: `bug`, `enhancement`, `new feature`, `security`, or `question`.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: "Current behaviour and why this matters."
+      placeholder: "What is happening, and why does it matter?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: "Goal"
+      description: "Desired behaviour after the change."
+      placeholder: "What should happen instead?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical_requirements
+    attributes:
+      label: "Technical requirements"
+      description: "Bullet list of technical constraints or requirements."
+      placeholder: "- Requirement one (**default**: value)\n- Requirement two"
+      value: "\n\n- Reuse existing code if possible\n- Code duplication is not allowed\n-Use parallel agents and split the tasks into smaller parts if possible so token limit doesn't exceed\n- Do not bump up version\n- Do not commit"
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: "Acceptance criteria"
+      description: "Checkboxes that define 'done' for this issue."
+      placeholder: "- [ ] Criterion one\n- [ ] Criterion two"
+
+  - type: input
+    id: affected_area
+    attributes:
+      label: "Affected area"
+      description: "Write all areas this touches, separated by comma."
+
+  - type: input
+    id: affected_area_other
+    attributes:
+      label: "Affected area — other"
+      description: "Free-text area not covered by the dropdown above."
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: "Testing"
+      description: "How to verify this change — manual steps, CLI commands, browser checks."
+      placeholder: "1. Navigate to ...\n2. Verify that ..."
+
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: "Out of scope"
+      description: "Explicit non-goals for this issue."
+
+  - type: textarea
+    id: references
+    attributes:
+      label: "References"
+      description: "Related issues, doc paths, file paths."
+      placeholder: "- #42\n- doc/reviewed/FEATURE.md"
