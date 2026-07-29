@@ -91,10 +91,10 @@ const editor = new StarEditor(document.getElementById('content'), {
     'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
     'fontSize', 'fontName', '|',
     'textColor', 'bgColor', '|',
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', '|',
+    'heading', '|',
     'ul', 'ol', 'blockquote', 'pre', '|',
     'link', 'unlink', '|',
-    'alignLeft', 'alignCenter', 'alignRight', 'justifyFull', '|',
+    'alignment', '|',
     'indent', 'outdent', '|',
     'hr', 'table', 'image', '|',
     'undo', 'redo', '|',
@@ -118,7 +118,8 @@ Use `'all'` as a shorthand to include every button in the default order.
 | `fontName` | Font family dropdown |
 | `textColor` | Text color picker |
 | `bgColor` | Background/highlight color picker |
-| `h1` – `h6` | Heading levels 1–6 |
+| `heading` | Heading level dropdown (H1–H6) — shown by default instead of 6 separate buttons |
+| `h1` – `h6` | Individual heading levels 1–6 (for a custom toolbar not using the `heading` dropdown) |
 | `blockquote` | Block quote |
 | `pre` | Preformatted code block |
 | `ul` | Unordered (bullet) list |
@@ -126,7 +127,8 @@ Use `'all'` as a shorthand to include every button in the default order.
 | `hr` | Horizontal rule |
 | `link` | Insert hyperlink |
 | `unlink` | Remove hyperlink |
-| `alignLeft` | Align text left |
+| `alignment` | Text alignment dropdown (left/center/right/justify) — shown by default instead of 4 separate buttons |
+| `alignLeft` | Align text left (for a custom toolbar not using the `alignment` dropdown) |
 | `alignCenter` | Align text center |
 | `alignRight` | Align text right |
 | `justifyFull` | Justify text |
