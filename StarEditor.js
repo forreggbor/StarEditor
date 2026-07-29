@@ -24,10 +24,10 @@ class StarEditor {
             'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
             'fontSize', 'fontName', '|',
             'textColor', 'bgColor', '|',
-            'h1', 'h2', 'h3', 'h4', 'h5', 'h6', '|',
+            'heading', '|',
             'ul', 'ol', 'blockquote', 'pre', '|',
             'link', 'unlink', '|',
-            'alignLeft', 'alignCenter', 'alignRight', 'justifyFull', '|',
+            'alignment', '|',
             'indent', 'outdent', '|',
             'hr', 'table', 'image', '|',
             'undo', 'redo', '|',
@@ -373,6 +373,8 @@ class StarEditor {
         image: { icon: '&#128247;', title: 'Insert Image', command: 'insertImage', custom: true },
         gallery: { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>', title: 'Insert gallery', command: 'insertGallery', custom: true },
         codeView: { icon: '&lt;/&gt;', title: 'View HTML Source', command: 'codeView', custom: true },
+        heading: { icon: 'H<small>&#9662;</small>', title: 'Heading', command: 'heading', custom: true, type: 'dropdown', groupItems: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] },
+        alignment: { icon: '&#8676;<small>&#9662;</small>', title: 'Alignment', command: 'alignment', custom: true, type: 'dropdown', groupItems: ['alignLeft', 'alignCenter', 'alignRight', 'justifyFull'] },
         '|': { type: 'separator' }
     };
 
@@ -1286,7 +1288,17 @@ class StarEditor {
         dropdown.dataset.dropdown = name;
 
         // Populate dropdown items based on button type
-        if (name === 'fontSize') {
+        if (def.groupItems) {
+            def.groupItems.forEach(key => {
+                const itemDef = StarEditor.toolbarButtons[key];
+                const item = document.createElement('div');
+                item.className = `${prefix}-dropdown-item`;
+                item.dataset.value = key;
+                item.title = this.t('toolbar.' + key) || itemDef.title;
+                item.innerHTML = itemDef.icon;
+                dropdown.appendChild(item);
+            });
+        } else if (name === 'fontSize') {
             this.config.fontSizes.forEach(size => {
                 const item = document.createElement('div');
                 item.className = `${prefix}-dropdown-item`;
