@@ -378,7 +378,7 @@ class StarEditor {
         gallery: { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>', title: 'Insert gallery', command: 'insertGallery', custom: true },
         codeView: { icon: '&lt;/&gt;', title: 'View HTML Source', command: 'codeView', custom: true },
         heading: { icon: 'H<small>&#9662;</small>', title: 'Heading', command: 'heading', custom: true, type: 'dropdown', groupItems: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] },
-        alignment: { icon: '&#8676;<small>&#9662;</small>', title: 'Alignment', command: 'alignment', custom: true, type: 'dropdown', groupItems: ['alignLeft', 'alignCenter', 'alignRight', 'justifyFull'] },
+        alignment: { icon: '&#8676;<small>&#9662;</small>', title: 'Alignment', command: 'alignment', custom: true, type: 'dropdown', groupItems: ['alignLeft', 'alignCenter', 'alignRight', 'justifyFull'], activeIgnore: ['alignLeft'] },
         '|': { type: 'separator' }
     };
 
@@ -4062,6 +4062,7 @@ class StarEditor {
 
             if (groupDef && groupDef.groupItems) {
                 const isActive = groupDef.groupItems.some(key => {
+                    if (groupDef.activeIgnore && groupDef.activeIgnore.includes(key)) return false;
                     const itemDef = StarEditor.toolbarButtons[key];
                     return this.isCommandStateActive(itemDef.command, itemDef.value);
                 });

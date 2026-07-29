@@ -15,7 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | Added    | Text alignment options now collapse into a single dropdown toolbar button      |
 
 ### Added
-- The default toolbar now shows one heading dropdown instead of 6 separate H1-H6 buttons, and one alignment dropdown instead of 4 separate alignment buttons, reducing toolbar clutter. The individual buttons remain available for custom `toolbar` configurations that want the old flat layout.
+- The default toolbar now shows one heading dropdown instead of 6 separate H1-H6 buttons, reducing toolbar clutter. The individual buttons remain available for custom `toolbar` configurations that want the old flat layout.
+- The default toolbar now shows one text alignment dropdown instead of 4 separate alignment buttons, reducing toolbar clutter. The individual buttons remain available for custom `toolbar` configurations that want the old flat layout.
 
 ## [2.8.1] - 2026-07-29
 
