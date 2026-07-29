@@ -4008,6 +4008,41 @@ class StarEditor {
     }
 
     /**
+     * Determine whether a single command/value pair currently matches the
+     * selection's state. Shared by individual toolbar buttons and by group
+     * membership checks for dropdown triggers (e.g. heading, alignment).
+     *
+     * @param {string} command
+     * @param {string|undefined} value
+     * @returns {boolean}
+     * @private
+     */
+    isCommandStateActive(command, value) {
+        // Check formatBlock for headings, blockquote, pre
+        if (command === 'formatBlock' && value) {
+            const currentBlock = document.queryCommandValue('formatBlock');
+            return currentBlock.toLowerCase() === value.toLowerCase();
+        // DOM-based check for subscript (Firefox queryCommandState unreliable)
+        } else if (command === 'subscript') {
+            return this.isInsideTag('sub');
+        // DOM-based check for superscript (Firefox queryCommandState unreliable)
+        } else if (command === 'superscript') {
+            return this.isInsideTag('sup');
+        // CSS-based check for justifyFull (Safari queryCommandState unreliable)
+        } else if (command === 'justifyFull') {
+            const block = this.getSelectedBlockElement();
+            return !!(block && getComputedStyle(block).textAlign === 'justify');
+        }
+
+        try {
+            return document.queryCommandState(command);
+        } catch (e) {
+            // Some commands don't support queryCommandState
+            return false;
+        }
+    }
+
+    /**
      * Update toolbar button active states
      * @private
      */
@@ -4016,42 +4051,24 @@ class StarEditor {
         const activeClass = `${this.config.classPrefix}-btn-active`;
 
         buttons.forEach(btn => {
-            const command = btn.dataset.command;
-            const value = btn.dataset.value;
-
             btn.classList.remove(activeClass);
 
-            // Check formatBlock for headings, blockquote, pre
-            if (command === 'formatBlock' && value) {
-                const currentBlock = document.queryCommandValue('formatBlock');
-                if (currentBlock.toLowerCase() === value.toLowerCase()) {
+            const groupKey = btn.dataset.dropdownTrigger;
+            const groupDef = groupKey ? StarEditor.toolbarButtons[groupKey] : null;
+
+            if (groupDef && groupDef.groupItems) {
+                const isActive = groupDef.groupItems.some(key => {
+                    const itemDef = StarEditor.toolbarButtons[key];
+                    return this.isCommandStateActive(itemDef.command, itemDef.value);
+                });
+                if (isActive) {
                     btn.classList.add(activeClass);
                 }
-            // DOM-based check for subscript (Firefox queryCommandState unreliable)
-            } else if (command === 'subscript') {
-                if (this.isInsideTag('sub')) {
-                    btn.classList.add(activeClass);
-                }
-            // DOM-based check for superscript (Firefox queryCommandState unreliable)
-            } else if (command === 'superscript') {
-                if (this.isInsideTag('sup')) {
-                    btn.classList.add(activeClass);
-                }
-            // CSS-based check for justifyFull (Safari queryCommandState unreliable)
-            } else if (command === 'justifyFull') {
-                const block = this.getSelectedBlockElement();
-                if (block && getComputedStyle(block).textAlign === 'justify') {
-                    btn.classList.add(activeClass);
-                }
-            } else {
-                // Check if command is currently active
-                try {
-                    if (document.queryCommandState(command)) {
-                        btn.classList.add(activeClass);
-                    }
-                } catch (e) {
-                    // Some commands don't support queryCommandState
-                }
+                return;
+            }
+
+            if (this.isCommandStateActive(btn.dataset.command, btn.dataset.value)) {
+                btn.classList.add(activeClass);
             }
         });
     }
