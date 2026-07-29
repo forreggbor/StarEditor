@@ -1890,10 +1890,19 @@ class StarEditor {
         this.closeAllPopups();
         this.restoreSelection();
 
+        const def = StarEditor.toolbarButtons[name];
+
         if (name === 'fontSize') {
             this.applyFontSize(value);
         } else if (name === 'fontName') {
             document.execCommand('fontName', false, value);
+        } else if (def && def.groupItems) {
+            const itemDef = StarEditor.toolbarButtons[value];
+            if (itemDef.custom) {
+                this.handleCustomCommand(itemDef.command);
+            } else {
+                this.exec(itemDef.command, itemDef.value || null);
+            }
         }
 
         this.sync();
