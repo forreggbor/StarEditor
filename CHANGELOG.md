@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Summary
 
-| Category | Description                                                                 |
-|----------|------------------------------------------------------------------------------|
+| Category | Description                                                                    |
+|----------|--------------------------------------------------------------------------------|
 | Added    | Heading levels (H1-H6) now collapse into a single dropdown toolbar button      |
 | Added    | Text alignment options now collapse into a single dropdown toolbar button      |
 
