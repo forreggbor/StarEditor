@@ -5,6 +5,19 @@ All notable changes to StarEditor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.1] - 2026-07-29
+
+### Summary
+
+| Category | Description                                                                |
+|----------|----------------------------------------------------------------------------|
+| Fixed    | Code view edits are no longer silently discarded on save                   |
+| Fixed    | Pasting multi-paragraph text no longer adds blank lines between paragraphs |
+
+### Fixed
+- Editing raw HTML in code view now correctly updates the underlying textarea, so saving a form no longer discards code-view edits. Previously only the rich-text view kept the textarea in sync; `getContent()`, `getText()`/`isEmpty()`, and `setContent()` are also now code-view-aware.
+- Pasting multi-paragraph content from sources such as Word, Outlook, or Google Docs no longer inserts extra blank paragraphs between the pasted paragraphs.
+
 ## [2.8.0] - 2026-06-25
 
 ### Summary

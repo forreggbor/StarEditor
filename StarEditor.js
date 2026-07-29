@@ -5,7 +5,7 @@
  * using native browser APIs (contenteditable, execCommand).
  *
  * @package StarEditor
- * @version 2.8.0
+ * @version 2.8.1
  * @license MIT
  */
 class StarEditor {
@@ -1429,20 +1429,17 @@ class StarEditor {
             }
         });
 
-        // Content sync on input
-        this.editor.addEventListener('input', () => {
+        // Content sync on input — shared by both the WYSIWYG editor and the
+        // code view textarea, so an edit made in either mode is immediately
+        // reflected in the hidden textarea and in onChange.
+        const handleContentInput = () => {
             this.sync();
             if (this.config.onChange) {
                 this.config.onChange(this.getContent());
             }
-        });
-
-        // Code editor sync on input
-        this.codeEditor.addEventListener('input', () => {
-            if (this.config.onChange) {
-                this.config.onChange(this.codeEditor.value);
-            }
-        });
+        };
+        this.editor.addEventListener('input', handleContentInput);
+        this.codeEditor.addEventListener('input', handleContentInput);
 
         // Keyboard shortcuts
         this.editor.addEventListener('keydown', (e) => this.handleKeyboard(e));
@@ -3933,9 +3930,16 @@ class StarEditor {
         let group = [];
         const flushGroup = () => {
             if (!group.length) return;
-            const p = document.createElement('p');
-            group[0].before(p);
-            group.forEach(n => p.appendChild(n));
+            // Whitespace-only text (e.g. formatting newlines between pasted
+            // block tags) carries no content worth wrapping — leave it as an
+            // inert root-level text node instead of turning it into a
+            // permanent empty <p>.
+            const isWhitespaceOnly = group.every(n => n.nodeType === Node.TEXT_NODE && !n.textContent.trim());
+            if (!isWhitespaceOnly) {
+                const p = document.createElement('p');
+                group[0].before(p);
+                group.forEach(n => p.appendChild(n));
+            }
             group = [];
         };
         [...this.editor.childNodes].forEach(node => {
@@ -4085,38 +4089,63 @@ class StarEditor {
     }
 
     /**
-     * Sync editor content to the hidden textarea
+     * Sync editor content to the hidden textarea. In code view the source
+     * pane is the only up-to-date copy — the WYSIWYG div is stale until the
+     * user switches back — so its value is copied verbatim, without
+     * re-parsing or re-normalizing, to avoid silently rewriting whatever
+     * HTML the user typed by hand.
      */
     sync() {
+        if (this.isCodeView) {
+            this.textarea.value = this.codeEditor.value;
+            return;
+        }
         this.normalizeContent();
         this.textarea.value = this.getCleanContent();
     }
 
     /**
-     * Get the current HTML content
+     * Get the current HTML content. Returns the code view source verbatim
+     * while in code view, since the WYSIWYG div is stale until the user
+     * switches back.
      *
      * @returns {string} The editor HTML content
      */
     getContent() {
+        if (this.isCodeView) {
+            return this.codeEditor.value;
+        }
         return this.getCleanContent();
     }
 
     /**
-     * Set the editor HTML content
+     * Set the editor HTML content. Also refreshes the code view source pane
+     * when currently in code view, so it doesn't revert the caller's change
+     * on the next toggle back to WYSIWYG.
      *
      * @param {string} html - The HTML content to set
      */
     setContent(html) {
         this.editor.innerHTML = this.sanitizeEditorUI(html);
+        if (this.isCodeView) {
+            this.codeEditor.value = this.getCleanContent();
+        }
         this.sync();
     }
 
     /**
-     * Get the current plain text content
+     * Get the current plain text content. While in code view, the text is
+     * extracted from the (unsaved) source pane via an inert DOMParser
+     * document — never assigned to a live element — so raw hand-typed HTML
+     * can't trigger resource loads just by checking emptiness.
      *
      * @returns {string} The editor plain text content
      */
     getText() {
+        if (this.isCodeView) {
+            const doc = new DOMParser().parseFromString(this.codeEditor.value, 'text/html');
+            return doc.body.textContent || '';
+        }
         return this.editor.textContent || this.editor.innerText;
     }
 
