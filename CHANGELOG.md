@@ -5,6 +5,29 @@ All notable changes to StarEditor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2026-07-30
+
+### Summary
+
+| Category | Description                                                          |
+|----------|----------------------------------------------------------------------|
+| Changed  | Toolbar icons replaced with a new, unified SVG icon set              |
+| Changed  | Font size and font family buttons now show the current value as text |
+| Added    | Text and background color buttons now preview the picked color live  |
+| Added    | New "Paragraph" option to reset selected text to plain formatting    |
+| Fixed    | Dropdown and color picker menus now close when clicking elsewhere    |
+
+### Added
+- Text Color and Background Color toolbar buttons now preview the currently picked color directly on their icon.
+- A new "Paragraph" option was added to the Heading dropdown, letting selected text be reset to plain paragraph formatting.
+
+### Changed
+- The toolbar icon set has been replaced with a new, unified collection of icons for a cleaner, more consistent look across every button.
+- The Font Size and Font Family toolbar buttons now display the current value as text (e.g. "16px", "Arial") instead of a generic icon, making the active setting visible at a glance.
+
+### Fixed
+- Dropdown menus (Font Size, Font Family, Heading, Alignment) and color pickers now close automatically after picking an option or when clicking anywhere else on the page, instead of staying open.
+
 ## [3.0.0] - 2026-07-30
 
 ### Summary

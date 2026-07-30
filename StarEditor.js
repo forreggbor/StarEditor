@@ -5,7 +5,7 @@
  * using native browser APIs (contenteditable, execCommand).
  *
  * @package StarEditor
- * @version 3.0.0
+ * @version 3.1.0
  * @license MIT
  */
 class StarEditor {
