@@ -1017,6 +1017,10 @@ class StarEditor {
         .star-image-toolbar-btn:hover {
             background: #f0f0f0;
         }
+        .star-image-toolbar-btn.star-btn-active {
+            background: #d0d0d0;
+            border-color: #999;
+        }
         .star-image-toolbar-btn svg {
             width: 15px;
             height: 15px;
@@ -3604,6 +3608,12 @@ class StarEditor {
         left += this.editor.offsetLeft;
         top += this.editor.offsetTop;
 
+        // Clamp horizontally so the toolbar stays within the wrapper's
+        // visible area — .star-wrapper has overflow:hidden, so anything
+        // past its right edge would be clipped and unclickable.
+        const maxLeft = this.wrapper.clientWidth - this.imageToolbar.offsetWidth;
+        left = Math.max(0, Math.min(left, maxLeft));
+
         this.imageToolbar.style.left = `${left}px`;
         this.imageToolbar.style.top = `${top - 36}px`;
     }
@@ -3658,6 +3668,9 @@ class StarEditor {
                 img.style.display = '';
                 img.style.clear = '';
                 img.style.margin = '';
+                if (!img.getAttribute('style')?.trim()) {
+                    img.removeAttribute('style');
+                }
                 this.updateResizerPosition(img);
                 this.updateToolbarPosition(img);
                 this.updateImageAlignButtons(img);

@@ -11,7 +11,7 @@ A lightweight, zero-dependency WYSIWYG rich text editor for textarea elements, b
 - Complete, consistent toolbar — every feature is always available
 - Font size, font family, text and background color
 - Tables — insert, edit properties, add/remove rows and columns
-- Images — server gallery, local upload (base64), URL; resize by dragging; alt text editing
+- Images — server gallery, local upload (base64), URL; resize by dragging; wrap alignment (left/center/right); alt text editing
 - Gallery picker — browse and insert server-side galleries
 - Code view — toggle between WYSIWYG and raw HTML
 - Keyboard shortcuts (Ctrl/Cmd + B, I, U, K, Z, Y)

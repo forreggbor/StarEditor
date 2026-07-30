@@ -1,6 +1,6 @@
 # Images and Galleries — Integration Guide
 
-This guide covers every image- and gallery-related feature added in v2.5.0–v2.8.0:
+This guide covers every image- and gallery-related feature added in v2.5.0–v3.2.0:
 
 - [Image toolbar](#image-toolbar) — align, resize, alt text, delete
 - [Server image gallery](#server-image-gallery) (`serverImages`, `serverImagesPageSize`)
