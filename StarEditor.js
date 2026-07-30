@@ -3608,12 +3608,6 @@ class StarEditor {
         left += this.editor.offsetLeft;
         top += this.editor.offsetTop;
 
-        // Clamp horizontally so the toolbar stays within the wrapper's
-        // visible area — .star-wrapper has overflow:hidden, so anything
-        // past its right edge would be clipped and unclickable.
-        const maxLeft = this.wrapper.clientWidth - this.imageToolbar.offsetWidth;
-        left = Math.max(0, Math.min(left, maxLeft));
-
         this.imageToolbar.style.left = `${left}px`;
         this.imageToolbar.style.top = `${top - 36}px`;
     }
