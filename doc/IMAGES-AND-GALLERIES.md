@@ -2,6 +2,7 @@
 
 This guide covers every image- and gallery-related feature added in v2.5.0–v2.8.0:
 
+- [Image toolbar](#image-toolbar) — align, resize, alt text, delete
 - [Server image gallery](#server-image-gallery) (`serverImages`, `serverImagesPageSize`)
 - [File upload hook](#file-upload-hook) (`onImageUpload`)
 - [Image insert hook](#image-insert-hook) (`onImageInsert`)
@@ -27,6 +28,27 @@ Which tab is active on open:
 When `imageUpload: false`, the Upload tab is hidden — only Server and URL remain.
 
 When `serverImages` is configured the modal opens wide (~80 vw, capped at 1100 px) to accommodate the sidebar layout.
+
+---
+
+## Image toolbar
+
+Clicking an inserted image selects it and shows a small floating toolbar above it, with 8 actions:
+
+| Button | Action |
+|--------|--------|
+| `Alt` | Edit the image's alt text |
+| Align left | Float the image left; surrounding text wraps around its right side |
+| Align center | Center the image as its own block; no text wrap (a browser cannot wrap text on both sides of one floated element, so centering is block-level, same as every other rich text editor) |
+| Align right | Float the image right; surrounding text wraps around its left side |
+| Remove alignment | Clear alignment, back to a plain inline image |
+| `50%` | Resize to 50% width |
+| `100%` | Resize to original width |
+| Delete | Remove the image |
+
+Alignment is applied as inline `style` on the `<img>` itself (`float`/`display`/`clear`/`margin`, `12px` spacing) — no separate CSS class, so it renders correctly wherever the saved HTML ends up, even outside a page that loads StarEditor's own stylesheet.
+
+The image can also be resized by dragging its corner handles while selected; this works identically whether or not the image is aligned — a floated image's surrounding text reflows continuously as you drag, same as an unaligned one's box just changes size.
 
 ---
 
