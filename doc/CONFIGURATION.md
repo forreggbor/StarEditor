@@ -95,7 +95,7 @@ of buttons, in this order:
 | `fontName` | Font family dropdown |
 | `textColor` | Text color picker |
 | `bgColor` | Background/highlight color picker |
-| `heading` | Heading level dropdown, containing H1–H6 |
+| `heading` | Heading level dropdown, containing Paragraph and H1–H6 |
 | `blockquote` | Block quote |
 | `pre` | Preformatted code block |
 | `ul` | Unordered (bullet) list |

@@ -81,6 +81,7 @@ class StarEditor {
             'toolbar.subscript': 'Subscript',
             'toolbar.superscript': 'Superscript',
             'toolbar.heading': 'Heading',
+            'toolbar.paragraph': 'Paragraph',
             'toolbar.h1': 'Heading 1',
             'toolbar.h2': 'Heading 2',
             'toolbar.h3': 'Heading 3',
@@ -210,6 +211,7 @@ class StarEditor {
             'toolbar.subscript': 'Alsó index',
             'toolbar.superscript': 'Felső index',
             'toolbar.heading': 'Címsor',
+            'toolbar.paragraph': 'Bekezdés',
             'toolbar.h1': 'Címsor 1',
             'toolbar.h2': 'Címsor 2',
             'toolbar.h3': 'Címsor 3',
@@ -364,6 +366,7 @@ class StarEditor {
         subscript: '<svg viewBox="0 0 24 24"><path d="M16,7.41L11.41,12L16,16.59L14.59,18L10,13.41L5.41,18L4,16.59L8.59,12L4,7.41L5.41,6L10,10.59L14.59,6L16,7.41M21.85,21.03H16.97V20.03L17.86,19.23C18.62,18.58 19.18,18.04 19.56,17.6C19.93,17.16 20.12,16.75 20.13,16.36C20.14,16.08 20.05,15.85 19.86,15.66C19.68,15.5 19.39,15.38 19,15.38C18.69,15.38 18.42,15.44 18.16,15.56L17.5,15.94L17.05,14.77C17.32,14.56 17.64,14.38 18.03,14.24C18.42,14.1 18.85,14 19.32,14C20.1,14.04 20.7,14.25 21.1,14.66C21.5,15.07 21.72,15.59 21.72,16.23C21.71,16.79 21.53,17.31 21.18,17.78C20.84,18.25 20.42,18.7 19.91,19.14L19.27,19.66V19.68H21.85V21.03Z" /></svg>',
         superscript: '<svg viewBox="0 0 24 24"><path d="M16,7.41L11.41,12L16,16.59L14.59,18L10,13.41L5.41,18L4,16.59L8.59,12L4,7.41L5.41,6L10,10.59L14.59,6L16,7.41M21.85,9H16.97V8L17.86,7.18C18.62,6.54 19.18,6 19.56,5.55C19.93,5.11 20.12,4.7 20.13,4.32C20.14,4.04 20.05,3.8 19.86,3.62C19.68,3.43 19.39,3.34 19,3.33C18.69,3.34 18.42,3.4 18.16,3.5L17.5,3.89L17.05,2.72C17.32,2.5 17.64,2.33 18.03,2.19C18.42,2.05 18.85,2 19.32,2C20.1,2 20.7,2.2 21.1,2.61C21.5,3 21.72,3.54 21.72,4.18C21.71,4.74 21.53,5.26 21.18,5.73C20.84,6.21 20.42,6.66 19.91,7.09L19.27,7.61V7.63H21.85V9Z" /></svg>',
         text_style: '<svg viewBox="0 0 24 24"><path d="M3,3H16V6H11V18H8V6H3V3M12,7H14V9H12V7M15,7H17V9H15V7M18,7H20V9H18V7M12,10H14V12H12V10M12,13H14V15H12V13M12,16H14V18H12V16M12,19H14V21H12V19Z" /></svg>',
+        paragraph_style: '<svg class="se-ci" viewBox="0 -960 960 960"><path d="M360-160v-240q-83 0-141.5-58.5T160-600q0-83 58.5-141.5T360-800h360v80h-80v560h-80v-560H440v560h-80Z"/></svg>',
         menu_arrow_down: '<svg viewBox="0 0 24 24"><path d="M7,10L12,15L17,10H7Z" /></svg>',
         font_color: '<svg viewBox="0 0 24 24"><g><path d="M9.62,12L12,5.67L14.37,12M11,3L5.5,17H7.75L8.87,14H15.12L16.25,17H18.5L13,3H11Z" /><path class="star-svg-color-bar" d="M0,24H24V20H0V24Z" /></g></svg>',
         background_color: '<svg viewBox="0 0 24 24"><g><path d="M4,17L6.75,14.25L6.72,14.23C6.14,13.64 6.14,12.69 6.72,12.11L11.46,7.37L15.7,11.61L10.96,16.35C10.39,16.93 9.46,16.93 8.87,16.37L8.24,17H4M15.91,2.91C16.5,2.33 17.45,2.33 18.03,2.91L20.16,5.03C20.74,5.62 20.74,6.57 20.16,7.16L16.86,10.45L12.62,6.21L15.91,2.91Z" /><path class="star-svg-color-bar" d="M0,24H24V20H0V24Z" /></g></svg>',
@@ -408,6 +411,7 @@ class StarEditor {
         strikethrough: { icon: StarEditor.icons.strike, title: 'Strikethrough', command: 'strikeThrough' },
         subscript: { icon: StarEditor.icons.subscript, title: 'Subscript', command: 'subscript', custom: true },
         superscript: { icon: StarEditor.icons.superscript, title: 'Superscript', command: 'superscript', custom: true },
+        paragraph: { icon: StarEditor.icons.paragraph_style, title: 'Paragraph', command: 'formatBlock', value: 'p' },
         h1: { icon: 'H1', title: 'Heading 1', command: 'formatBlock', value: 'h1' },
         h2: { icon: 'H2', title: 'Heading 2', command: 'formatBlock', value: 'h2' },
         h3: { icon: 'H3', title: 'Heading 3', command: 'formatBlock', value: 'h3' },
@@ -438,7 +442,7 @@ class StarEditor {
         image: { icon: StarEditor.icons.image, title: 'Insert Image', command: 'insertImage', custom: true },
         gallery: { icon: StarEditor.icons.image_gallery, title: 'Insert gallery', command: 'insertGallery', custom: true },
         codeView: { icon: StarEditor.icons.code_view, title: 'View HTML Source', command: 'codeView', custom: true },
-        heading: { icon: StarEditor.icons.text_style + StarEditor.icons.menu_arrow_down.replace('<svg ', '<svg class="star-caret" '), title: 'Heading', command: 'heading', custom: true, type: 'dropdown', groupItems: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] },
+        heading: { icon: StarEditor.icons.text_style + StarEditor.icons.menu_arrow_down.replace('<svg ', '<svg class="star-caret" '), title: 'Heading', command: 'heading', custom: true, type: 'dropdown', groupItems: ['paragraph', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'], activeIgnore: ['paragraph'] },
         alignment: { icon: StarEditor.icons.align_left + StarEditor.icons.menu_arrow_down.replace('<svg ', '<svg class="star-caret" '), title: 'Alignment', command: 'alignment', custom: true, type: 'dropdown', groupItems: ['alignLeft', 'alignCenter', 'alignRight', 'justifyFull'], activeIgnore: ['alignLeft'] },
         '|': { type: 'separator' }
     };
@@ -1660,10 +1664,13 @@ class StarEditor {
             }
         });
 
-        // Document click handler to close popups and deselect images/tables
+        // Document click handler to close popups and deselect images/tables.
+        // Dropdown/color-picker triggers and their items stopPropagation() in the
+        // toolbar handler above, so any click that reaches here was neither of those —
+        // safe to always close whatever's open, not just clicks outside the whole widget.
         this.documentClickHandler = (e) => {
+            this.closeAllPopups();
             if (!this.wrapper.contains(e.target)) {
-                this.closeAllPopups();
                 this.deselectImage();
                 this.deselectTable();
             }
