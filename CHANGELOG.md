@@ -5,6 +5,17 @@ All notable changes to StarEditor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-07-30
+
+### Summary
+
+| Category | Description                                                    |
+|----------|----------------------------------------------------------------|
+| Added    | Images can now be aligned left/center/right with text wrapping |
+
+### Added
+- Inserted images can now be aligned left, center, or right from the image toolbar. Left and right wrap the surrounding paragraph text around the image; center displays it as its own centered block. A fourth button removes the alignment.
+
 ## [3.1.0] - 2026-07-30
 
 ### Summary
