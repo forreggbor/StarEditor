@@ -5,6 +5,17 @@ All notable changes to StarEditor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.1] - 2026-07-30
+
+### Summary
+
+| Category | Description                                                                      |
+|----------|----------------------------------------------------------------------------------|
+| Fixed    | Content is no longer re-serialized when a submit is blocked by another validator |
+
+### Fixed
+- Saving a form is no longer treated as a content change when another script on the page blocks the submit (for example, a required-field check). Previously the editor still normalized and re-saved its content on a blocked attempt, which could make host pages with an "unsaved changes" warning keep nagging even after nothing was actually left unsaved.
+
 ## [3.2.0] - 2026-07-30
 
 ### Summary

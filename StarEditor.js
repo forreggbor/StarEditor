@@ -5,7 +5,7 @@
  * using native browser APIs (contenteditable, execCommand).
  *
  * @package StarEditor
- * @version 3.2.0
+ * @version 3.2.1
  * @license MIT
  */
 class StarEditor {
@@ -1693,10 +1693,19 @@ class StarEditor {
         };
         document.addEventListener('click', this.documentClickHandler);
 
-        // Sync before form submission
+        // Sync before form submission. Skip when another listener already
+        // blocked this submit (e.g. a required-field guard calling
+        // preventDefault()) — syncing still re-serializes the content even
+        // though nothing is actually being submitted, which is at best
+        // pointless and, for callers that snapshot the form to detect
+        // unsaved changes, makes a blocked submit look like a fresh edit.
         const form = this.textarea.closest('form');
         if (form) {
-            form.addEventListener('submit', () => this.sync());
+            form.addEventListener('submit', (e) => {
+                if (!e.defaultPrevented) {
+                    this.sync();
+                }
+            });
         }
     }
 
