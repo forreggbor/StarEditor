@@ -165,6 +165,10 @@ class StarEditor {
 
             // Image toolbar
             'imageToolbar.editAlt': 'Edit alt text',
+            'imageToolbar.alignLeft': 'Align left, wrap text',
+            'imageToolbar.alignCenter': 'Center, no wrap',
+            'imageToolbar.alignRight': 'Align right, wrap text',
+            'imageToolbar.alignNone': 'Remove alignment',
             'imageToolbar.resize50': '50% size',
             'imageToolbar.resize100': 'Original size',
             'imageToolbar.delete': 'Delete image',
@@ -295,6 +299,10 @@ class StarEditor {
 
             // Image toolbar
             'imageToolbar.editAlt': 'Alt szöveg szerkesztése',
+            'imageToolbar.alignLeft': 'Balra, szöveg körbefutással',
+            'imageToolbar.alignCenter': 'Középre, körbefutás nélkül',
+            'imageToolbar.alignRight': 'Jobbra, szöveg körbefutással',
+            'imageToolbar.alignNone': 'Igazítás eltávolítása',
             'imageToolbar.resize50': '50% méret',
             'imageToolbar.resize100': 'Eredeti méret',
             'imageToolbar.delete': 'Kép törlése',
@@ -397,7 +405,11 @@ class StarEditor {
         insert_column_right: '<svg viewBox="0 0 24 24"><path d="M11,2A2,2 0 0,1 13,4V20A2,2 0 0,1 11,22H2V2H11M4,10V14H11V10H4M4,16V20H11V16H4M4,4V8H11V4H4M15,11H18V8H20V11H23V13H20V16H18V13H15V11Z" /></svg>',
         delete_row: '<svg viewBox="0 0 24 24"><path d="M9.41,13L12,15.59L14.59,13L16,14.41L13.41,17L16,19.59L14.59,21L12,18.41L9.41,21L8,19.59L10.59,17L8,14.41L9.41,13M22,9A2,2 0 0,1 20,11H4A2,2 0 0,1 2,9V6A2,2 0 0,1 4,4H20A2,2 0 0,1 22,6V9M4,9H8V6H4V9M10,9H14V6H10V9M16,9H20V6H16V9Z" /></svg>',
         delete_column: '<svg viewBox="0 0 24 24"><path d="M4,2H11A2,2 0 0,1 13,4V20A2,2 0 0,1 11,22H4A2,2 0 0,1 2,20V4A2,2 0 0,1 4,2M4,10V14H11V10H4M4,16V20H11V16H4M4,4V8H11V4H4M17.59,12L15,9.41L16.41,8L19,10.59L21.59,8L23,9.41L20.41,12L23,14.59L21.59,16L19,13.41L16.41,16L15,14.59L17.59,12Z" /></svg>',
-        delete: '<svg class="se-ci" viewBox="0 0 15.73 15.74"><g><path d="M19.16,6.71a.94.94,0,0,0,.69-.28.91.91,0,0,0,.29-.68A1,1,0,0,0,19.85,5a.93.93,0,0,0-.69-.3H14.24A.94.94,0,0,0,14,4.06a.92.92,0,0,0-.7-.3h-2a1,1,0,0,0-.7.3.93.93,0,0,0-.28.68H5.39A.92.92,0,0,0,4.7,5a1,1,0,0,0-.29.71.91.91,0,0,0,.29.68,1,1,0,0,0,.69.28H19.16Zm-12.79,1a1,1,0,0,0-.7.3.94.94,0,0,0-.28.69v8.85A1.88,1.88,0,0,0,6,18.93a1.9,1.9,0,0,0,1.39.57H17.2a1.87,1.87,0,0,0,1.39-.58,1.91,1.91,0,0,0,.58-1.39V8.68A1,1,0,0,0,18.88,8a.89.89,0,0,0-.7-.29,1,1,0,0,0-.69.29.92.92,0,0,0-.29.68v7.87a1,1,0,0,1-1,1H8.34a.94.94,0,0,1-.69-.28,1,1,0,0,1-.29-.71V8.68a1,1,0,0,0-1-1Z" transform="translate(-4.41 -3.76)"/></g></svg>'
+        delete: '<svg class="se-ci" viewBox="0 0 15.73 15.74"><g><path d="M19.16,6.71a.94.94,0,0,0,.69-.28.91.91,0,0,0,.29-.68A1,1,0,0,0,19.85,5a.93.93,0,0,0-.69-.3H14.24A.94.94,0,0,0,14,4.06a.92.92,0,0,0-.7-.3h-2a1,1,0,0,0-.7.3.93.93,0,0,0-.28.68H5.39A.92.92,0,0,0,4.7,5a1,1,0,0,0-.29.71.91.91,0,0,0,.29.68,1,1,0,0,0,.69.28H19.16Zm-12.79,1a1,1,0,0,0-.7.3.94.94,0,0,0-.28.69v8.85A1.88,1.88,0,0,0,6,18.93a1.9,1.9,0,0,0,1.39.57H17.2a1.87,1.87,0,0,0,1.39-.58,1.91,1.91,0,0,0,.58-1.39V8.68A1,1,0,0,0,18.88,8a.89.89,0,0,0-.7-.29,1,1,0,0,0-.69.29.92.92,0,0,0-.29.68v7.87a1,1,0,0,1-1,1H8.34a.94.94,0,0,1-.69-.28,1,1,0,0,1-.29-.71V8.68a1,1,0,0,0-1-1Z" transform="translate(-4.41 -3.76)"/></g></svg>',
+        format_float_left: '<svg viewBox="0 0 24 24"><path d="M3,7H9V13H3V7M3,3H21V5H3V3M21,7V9H11V7H21M21,11V13H11V11H21M3,15H17V17H3V15M3,19H21V21H3V19Z" /></svg>',
+        format_float_center: '<svg viewBox="0 0 24 24"><path d="M9,7H15V13H9V7M3,3H21V5H3V3M3,15H21V17H3V15M3,19H17V21H3V19Z" /></svg>',
+        format_float_right: '<svg viewBox="0 0 24 24"><path d="M15,7H21V13H15V7M3,3H21V5H3V3M13,7V9H3V7H13M9,11V13H3V11H9M3,15H17V17H3V15M3,19H21V21H3V19Z" /></svg>',
+        format_float_none: '<svg viewBox="0 0 24 24"><path d="M3,7H9V13H3V7M3,3H21V5H3V3M21,11V13H11V11H21M3,15H17V17H3V15M3,19H21V21H3V19Z" /></svg>'
     };
 
     /**
@@ -3394,6 +3406,10 @@ class StarEditor {
         this.imageToolbar.className = `${prefix}-image-toolbar`;
         this.imageToolbar.innerHTML = `
             <button type="button" class="${prefix}-image-toolbar-btn" data-action="edit-alt" title="${this.t('imageToolbar.editAlt')}">Alt</button>
+            <button type="button" class="${prefix}-image-toolbar-btn" data-action="align-left" title="${this.t('imageToolbar.alignLeft')}">${StarEditor.icons.format_float_left}</button>
+            <button type="button" class="${prefix}-image-toolbar-btn" data-action="align-center" title="${this.t('imageToolbar.alignCenter')}">${StarEditor.icons.format_float_center}</button>
+            <button type="button" class="${prefix}-image-toolbar-btn" data-action="align-right" title="${this.t('imageToolbar.alignRight')}">${StarEditor.icons.format_float_right}</button>
+            <button type="button" class="${prefix}-image-toolbar-btn" data-action="align-none" title="${this.t('imageToolbar.alignNone')}">${StarEditor.icons.format_float_none}</button>
             <button type="button" class="${prefix}-image-toolbar-btn" data-action="resize-50" title="${this.t('imageToolbar.resize50')}">50%</button>
             <button type="button" class="${prefix}-image-toolbar-btn" data-action="resize-100" title="${this.t('imageToolbar.resize100')}">100%</button>
             <button type="button" class="${prefix}-image-toolbar-btn" data-action="delete" title="${this.t('imageToolbar.delete')}">${StarEditor.icons.delete}</button>
@@ -3402,6 +3418,7 @@ class StarEditor {
         // Position toolbar above the image
         this.wrapper.appendChild(this.imageToolbar);
         this.updateToolbarPosition(img);
+        this.updateImageAlignButtons(img);
 
         // Handle toolbar button clicks
         this.imageToolbar.addEventListener('click', (e) => {
@@ -3413,6 +3430,32 @@ class StarEditor {
 
             const action = btn.dataset.action;
             this.handleImageAction(action);
+        });
+    }
+
+    /**
+     * Highlight whichever image-toolbar alignment button matches the image's
+     * current inline alignment style. Read directly from the inline style we
+     * set ourselves (no getComputedStyle needed — nothing else sets these).
+     *
+     * @param {HTMLImageElement} img - The image element
+     * @private
+     */
+    updateImageAlignButtons(img) {
+        if (!this.imageToolbar) return;
+
+        const activeClass = `${this.config.classPrefix}-btn-active`;
+        let activeAction = 'align-none';
+        if (img.style.float === 'left') {
+            activeAction = 'align-left';
+        } else if (img.style.float === 'right') {
+            activeAction = 'align-right';
+        } else if (img.style.display === 'block') {
+            activeAction = 'align-center';
+        }
+
+        this.imageToolbar.querySelectorAll('[data-action^="align-"]').forEach(btn => {
+            btn.classList.toggle(activeClass, btn.dataset.action === activeAction);
         });
     }
 
