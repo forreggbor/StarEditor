@@ -3623,6 +3623,46 @@ class StarEditor {
             case 'edit-alt':
                 this.editImageAlt(img);
                 break;
+            case 'align-left':
+                img.style.float = 'left';
+                img.style.display = '';
+                img.style.clear = '';
+                img.style.margin = '12px 12px 12px 0';
+                this.updateResizerPosition(img);
+                this.updateToolbarPosition(img);
+                this.updateImageAlignButtons(img);
+                this.sync();
+                break;
+            case 'align-center':
+                img.style.float = '';
+                img.style.display = 'block';
+                img.style.clear = 'both';
+                img.style.margin = '12px auto';
+                this.updateResizerPosition(img);
+                this.updateToolbarPosition(img);
+                this.updateImageAlignButtons(img);
+                this.sync();
+                break;
+            case 'align-right':
+                img.style.float = 'right';
+                img.style.display = '';
+                img.style.clear = '';
+                img.style.margin = '12px 0 12px 12px';
+                this.updateResizerPosition(img);
+                this.updateToolbarPosition(img);
+                this.updateImageAlignButtons(img);
+                this.sync();
+                break;
+            case 'align-none':
+                img.style.float = '';
+                img.style.display = '';
+                img.style.clear = '';
+                img.style.margin = '';
+                this.updateResizerPosition(img);
+                this.updateToolbarPosition(img);
+                this.updateImageAlignButtons(img);
+                this.sync();
+                break;
             case 'resize-50':
                 img.style.width = '50%';
                 img.style.height = 'auto';
