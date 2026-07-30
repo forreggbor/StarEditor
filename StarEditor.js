@@ -106,6 +106,7 @@ class StarEditor {
             'toolbar.clearFormat': 'Clear Formatting',
             'toolbar.fontSize': 'Font Size',
             'toolbar.fontName': 'Font Family',
+            'toolbar.fontNameDefault': 'Font',
             'toolbar.textColor': 'Text Color',
             'toolbar.bgColor': 'Background Color',
             'toolbar.table': 'Insert Table',
@@ -178,14 +179,14 @@ class StarEditor {
             'tableToolbar.deleteTable': 'Delete table',
 
             // Table toolbar button labels
-            'tableToolbar.propertiesLabel': '&#9881; Properties',
-            'tableToolbar.rowAboveLabel': '&#8593; Row',
-            'tableToolbar.rowBelowLabel': '&#8595; Row',
-            'tableToolbar.colLeftLabel': '&#8592; Col',
-            'tableToolbar.colRightLabel': '&#8594; Col',
-            'tableToolbar.deleteRowLabel': '&#10060; Row',
-            'tableToolbar.deleteColLabel': '&#10060; Col',
-            'tableToolbar.deleteTableLabel': '&#10060; Table',
+            'tableToolbar.propertiesLabel': 'Properties',
+            'tableToolbar.rowAboveLabel': 'Row',
+            'tableToolbar.rowBelowLabel': 'Row',
+            'tableToolbar.colLeftLabel': 'Col',
+            'tableToolbar.colRightLabel': 'Col',
+            'tableToolbar.deleteRowLabel': 'Row',
+            'tableToolbar.deleteColLabel': 'Col',
+            'tableToolbar.deleteTableLabel': 'Table',
 
             // Alert messages
             'alert.invalidImageType': 'Invalid image type. Allowed: ',
@@ -234,6 +235,7 @@ class StarEditor {
             'toolbar.clearFormat': 'Formázás törlése',
             'toolbar.fontSize': 'Betűméret',
             'toolbar.fontName': 'Betűtípus',
+            'toolbar.fontNameDefault': 'Betűtípus',
             'toolbar.textColor': 'Szövegszín',
             'toolbar.bgColor': 'Háttérszín',
             'toolbar.table': 'Táblázat beszúrása',
@@ -306,14 +308,14 @@ class StarEditor {
             'tableToolbar.deleteTable': 'Táblázat törlése',
 
             // Table toolbar button labels
-            'tableToolbar.propertiesLabel': '&#9881; Tulajdonságok',
-            'tableToolbar.rowAboveLabel': '&#8593; Sor',
-            'tableToolbar.rowBelowLabel': '&#8595; Sor',
-            'tableToolbar.colLeftLabel': '&#8592; Oszlop',
-            'tableToolbar.colRightLabel': '&#8594; Oszlop',
-            'tableToolbar.deleteRowLabel': '&#10060; Sor',
-            'tableToolbar.deleteColLabel': '&#10060; Oszlop',
-            'tableToolbar.deleteTableLabel': '&#10060; Táblázat',
+            'tableToolbar.propertiesLabel': 'Tulajdonságok',
+            'tableToolbar.rowAboveLabel': 'Sor',
+            'tableToolbar.rowBelowLabel': 'Sor',
+            'tableToolbar.colLeftLabel': 'Oszlop',
+            'tableToolbar.colRightLabel': 'Oszlop',
+            'tableToolbar.deleteRowLabel': 'Sor',
+            'tableToolbar.deleteColLabel': 'Oszlop',
+            'tableToolbar.deleteTableLabel': 'Táblázat',
 
             // Alert messages
             'alert.invalidImageType': 'Érvénytelen képformátum. Engedélyezett: ',
@@ -348,48 +350,96 @@ class StarEditor {
     ];
 
     /**
+     * Monochrome SVG toolbar icon set, sourced from SunEditor (JiHong88/SunEditor,
+     * src/assets/icons/defaultIcons.js, MIT license, Copyright (c) 2017-2025 Yi JiHong).
+     * Each value is a bare <svg> string injected via innerHTML; fill is left to CSS so
+     * every icon inherits the button's currentColor.
+     * @type {Object<string, string>}
+     */
+    static icons = {
+        bold: '<svg class="se-ci" viewBox="0 0 384 512"><path d="M304.793 243.891c33.639-18.537 53.657-54.16 53.657-95.693 0-48.236-26.25-87.626-68.626-104.179C265.138 34.01 240.849 32 209.661 32H24c-8.837 0-16 7.163-16 16v33.049c0 8.837 7.163 16 16 16h33.113v318.53H24c-8.837 0-16 7.163-16 16V464c0 8.837 7.163 16 16 16h195.69c24.203 0 44.834-1.289 66.866-7.584C337.52 457.193 376 410.647 376 350.014c0-52.168-26.573-91.684-71.207-106.123zM142.217 100.809h67.444c16.294 0 27.536 2.019 37.525 6.717 15.828 8.479 24.906 26.502 24.906 49.446 0 35.029-20.32 56.79-53.029 56.79h-76.846V100.809zm112.642 305.475c-10.14 4.056-22.677 4.907-31.409 4.907h-81.233V281.943h84.367c39.645 0 63.057 25.38 63.057 63.057.001 28.425-13.66 52.483-34.782 61.284z"/></svg>',
+        italic: '<svg viewBox="0 0 24 24"><path d="M10,4V7H12.21L8.79,15H6V18H14V15H11.79L15.21,7H18V4H10Z" /></svg>',
+        underline: '<svg class="se-ci" viewBox="0 0 9.78 15.74"><g><path d="M14.64,3.76h2.52v7.72a4.51,4.51,0,0,1-.59,2.31,3.76,3.76,0,0,1-1.71,1.53,6.12,6.12,0,0,1-2.64.53,5,5,0,0,1-3.57-1.18,4.17,4.17,0,0,1-1.27-3.24V3.76H9.9v7.3a3,3,0,0,0,.55,2,2.3,2.3,0,0,0,1.83.65,2.26,2.26,0,0,0,1.8-.65,3.09,3.09,0,0,0,.55-2V3.76Zm2.52,13.31V19.5H7.39V17.08h9.77Z" transform="translate(-7.38 -3.76)"/></g></svg>',
+        strike: '<svg viewBox="0 0 24 24"><path d="M7.2 9.8C6 7.5 7.7 4.8 10.1 4.3C13.2 3.3 17.7 4.7 17.6 8.5H14.6C14.6 8.2 14.5 7.9 14.5 7.7C14.3 7.1 13.9 6.8 13.3 6.6C12.5 6.3 11.2 6.4 10.5 6.9C9 8.2 10.4 9.5 12 10H7.4C7.3 9.9 7.3 9.8 7.2 9.8M21 13V11H3V13H12.6C12.8 13.1 13 13.1 13.2 13.2C13.8 13.5 14.3 13.7 14.5 14.3C14.6 14.7 14.7 15.2 14.5 15.6C14.3 16.1 13.9 16.3 13.4 16.5C11.6 17 9.4 16.3 9.5 14.1H6.5C6.4 16.7 8.6 18.5 11 18.8C14.8 19.6 19.3 17.2 17.3 12.9L21 13Z" /></svg>',
+        subscript: '<svg viewBox="0 0 24 24"><path d="M16,7.41L11.41,12L16,16.59L14.59,18L10,13.41L5.41,18L4,16.59L8.59,12L4,7.41L5.41,6L10,10.59L14.59,6L16,7.41M21.85,21.03H16.97V20.03L17.86,19.23C18.62,18.58 19.18,18.04 19.56,17.6C19.93,17.16 20.12,16.75 20.13,16.36C20.14,16.08 20.05,15.85 19.86,15.66C19.68,15.5 19.39,15.38 19,15.38C18.69,15.38 18.42,15.44 18.16,15.56L17.5,15.94L17.05,14.77C17.32,14.56 17.64,14.38 18.03,14.24C18.42,14.1 18.85,14 19.32,14C20.1,14.04 20.7,14.25 21.1,14.66C21.5,15.07 21.72,15.59 21.72,16.23C21.71,16.79 21.53,17.31 21.18,17.78C20.84,18.25 20.42,18.7 19.91,19.14L19.27,19.66V19.68H21.85V21.03Z" /></svg>',
+        superscript: '<svg viewBox="0 0 24 24"><path d="M16,7.41L11.41,12L16,16.59L14.59,18L10,13.41L5.41,18L4,16.59L8.59,12L4,7.41L5.41,6L10,10.59L14.59,6L16,7.41M21.85,9H16.97V8L17.86,7.18C18.62,6.54 19.18,6 19.56,5.55C19.93,5.11 20.12,4.7 20.13,4.32C20.14,4.04 20.05,3.8 19.86,3.62C19.68,3.43 19.39,3.34 19,3.33C18.69,3.34 18.42,3.4 18.16,3.5L17.5,3.89L17.05,2.72C17.32,2.5 17.64,2.33 18.03,2.19C18.42,2.05 18.85,2 19.32,2C20.1,2 20.7,2.2 21.1,2.61C21.5,3 21.72,3.54 21.72,4.18C21.71,4.74 21.53,5.26 21.18,5.73C20.84,6.21 20.42,6.66 19.91,7.09L19.27,7.61V7.63H21.85V9Z" /></svg>',
+        text_style: '<svg viewBox="0 0 24 24"><path d="M3,3H16V6H11V18H8V6H3V3M12,7H14V9H12V7M15,7H17V9H15V7M18,7H20V9H18V7M12,10H14V12H12V10M12,13H14V15H12V13M12,16H14V18H12V16M12,19H14V21H12V19Z" /></svg>',
+        menu_arrow_down: '<svg viewBox="0 0 24 24"><path d="M7,10L12,15L17,10H7Z" /></svg>',
+        font_color: '<svg viewBox="0 0 24 24"><g><path d="M9.62,12L12,5.67L14.37,12M11,3L5.5,17H7.75L8.87,14H15.12L16.25,17H18.5L13,3H11Z" /><path class="star-svg-color-bar" d="M0,24H24V20H0V24Z" /></g></svg>',
+        background_color: '<svg viewBox="0 0 24 24"><g><path d="M4,17L6.75,14.25L6.72,14.23C6.14,13.64 6.14,12.69 6.72,12.11L11.46,7.37L15.7,11.61L10.96,16.35C10.39,16.93 9.46,16.93 8.87,16.37L8.24,17H4M15.91,2.91C16.5,2.33 17.45,2.33 18.03,2.91L20.16,5.03C20.74,5.62 20.74,6.57 20.16,7.16L16.86,10.45L12.62,6.21L15.91,2.91Z" /><path class="star-svg-color-bar" d="M0,24H24V20H0V24Z" /></g></svg>',
+        list_bulleted: '<svg class="se-ci" viewBox="0 0 15.74 12.37"><g><path d="M7.77,16.12a1.59,1.59,0,0,0-.49-1.18,1.62,1.62,0,0,0-1.19-.49,1.68,1.68,0,1,0,0,3.36,1.67,1.67,0,0,0,1.68-1.69Zm0-4.48A1.67,1.67,0,0,0,6.09,10,1.68,1.68,0,0,0,4.9,12.82a1.62,1.62,0,0,0,1.19.49,1.67,1.67,0,0,0,1.68-1.67Zm12.38,3.64a.27.27,0,0,0-.08-.19.28.28,0,0,0-.2-.09H9.19a.28.28,0,0,0-.2.08.29.29,0,0,0-.08.19V17a.27.27,0,0,0,.28.28H19.87a.27.27,0,0,0,.19-.08.24.24,0,0,0,.08-.2V15.28ZM7.77,7.13a1.63,1.63,0,0,0-.49-1.2,1.61,1.61,0,0,0-1.19-.49,1.61,1.61,0,0,0-1.19.49,1.71,1.71,0,0,0,0,2.4,1.62,1.62,0,0,0,1.19.49,1.61,1.61,0,0,0,1.19-.49,1.63,1.63,0,0,0,.49-1.2Zm12.38,3.66a.28.28,0,0,0-.08-.2.29.29,0,0,0-.19-.08H9.19a.27.27,0,0,0-.28.28v1.69a.27.27,0,0,0,.08.19.24.24,0,0,0,.2.08H19.87a.27.27,0,0,0,.19-.08.25.25,0,0,0,.08-.19V10.79Zm0-4.5a.27.27,0,0,0-.08-.19A.25.25,0,0,0,19.88,6H9.19A.28.28,0,0,0,9,6.1a.26.26,0,0,0-.08.19V8A.27.27,0,0,0,9,8.17a.24.24,0,0,0,.2.08H19.87a.27.27,0,0,0,.19-.08A.25.25,0,0,0,20.14,8V6.29Z" transform="translate(-4.41 -5.44)"/></g></svg>',
+        list_numbered: '<svg class="se-ci" viewBox="0 0 15.69 15.74"><g><path d="M7.66,18a1.24,1.24,0,0,0-.26-.78,1.17,1.17,0,0,0-.72-.42l.85-1V15H4.58v1.34h.94v-.46l.85,0h0c-.11.11-.22.23-.32.35s-.23.27-.37.47L5.39,17l.23.51c.61-.05.92.11.92.49a.42.42,0,0,1-.18.37.79.79,0,0,1-.45.12A1.41,1.41,0,0,1,5,18.15l-.51.77A2.06,2.06,0,0,0,6,19.5a1.8,1.8,0,0,0,1.2-.41A1.38,1.38,0,0,0,7.66,18Zm0-5.54H6.75V13H5.63A.72.72,0,0,1,6,12.51a5.45,5.45,0,0,1,.66-.45,2.71,2.71,0,0,0,.67-.57,1.19,1.19,0,0,0,.31-.81,1.29,1.29,0,0,0-.45-1,1.86,1.86,0,0,0-2-.11,1.51,1.51,0,0,0-.62.7l.74.52A.87.87,0,0,1,6,10.28a.51.51,0,0,1,.35.12.42.42,0,0,1,.13.33.55.55,0,0,1-.21.4,3,3,0,0,1-.5.38c-.19.13-.39.27-.58.42a2,2,0,0,0-.5.6,1.63,1.63,0,0,0-.21.81,3.89,3.89,0,0,0,.05.48h3.2V12.44Zm12.45,2.82a.27.27,0,0,0-.08-.19.28.28,0,0,0-.21-.08H9.1a.32.32,0,0,0-.21.08.24.24,0,0,0-.08.2V17a.27.27,0,0,0,.08.19.3.3,0,0,0,.21.08H19.83a.32.32,0,0,0,.21-.08.25.25,0,0,0,.08-.19V15.26ZM7.69,7.32h-1V3.76H5.8L4.6,4.88l.63.68a1.85,1.85,0,0,0,.43-.48h0l0,2.24H4.74V8.2h3V7.32Zm12.43,3.42a.27.27,0,0,0-.08-.19.28.28,0,0,0-.21-.08H9.1a.32.32,0,0,0-.21.08.24.24,0,0,0-.08.2v1.71a.27.27,0,0,0,.08.19.3.3,0,0,0,.21.08H19.83a.32.32,0,0,0,.21-.08.25.25,0,0,0,.08-.19V10.74Zm0-4.52A.27.27,0,0,0,20,6,.28.28,0,0,0,19.83,6H9.1A.32.32,0,0,0,8.89,6a.24.24,0,0,0-.08.19V7.93a.27.27,0,0,0,.08.19.32.32,0,0,0,.21.08H19.83A.32.32,0,0,0,20,8.12a.26.26,0,0,0,.08-.2V6.22Z" transform="translate(-4.43 -3.76)"/></g></svg>',
+        blockquote: '<svg viewBox="0 0 24 24"><path d="M11 18V10H9.12L11.12 6H5.38L3 10.76V18M9 16H5V11.24L6.62 8H7.88L5.88 12H9M21 18V10H19.12L21.12 6H15.38L13 10.76V18M19 16H15V11.24L16.62 8H17.88L15.88 12H19Z" /></svg>',
+        code_block: '<svg viewBox="0 0 24 24"><path d="M5.59 3.41L7 4.82L3.82 8L7 11.18L5.59 12.6L1 8L5.59 3.41M11.41 3.41L16 8L11.41 12.6L10 11.18L13.18 8L10 4.82L11.41 3.41M22 6V18C22 19.11 21.11 20 20 20H4C2.9 20 2 19.11 2 18V14H4V18H20V6H17.03V4H20C21.11 4 22 4.89 22 6Z" /></svg>',
+        link: '<svg viewBox="0 0 24 24"><path d="M3.9,12C3.9,10.29 5.29,8.9 7,8.9H11V7H7A5,5 0 0,0 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12M8,13H16V11H8V13M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.71 18.71,15.1 17,15.1H13V17H17A5,5 0 0,0 22,12A5,5 0 0,0 17,7Z" /></svg>',
+        unlink: '<svg viewBox="0 0 24 24"><path d="M17,7H13V8.9H17C18.71,8.9 20.1,10.29 20.1,12C20.1,13.43 19.12,14.63 17.79,15L19.25,16.44C20.88,15.61 22,13.95 22,12A5,5 0 0,0 17,7M16,11H13.81L15.81,13H16V11M2,4.27L5.11,7.38C3.29,8.12 2,9.91 2,12A5,5 0 0,0 7,17H11V15.1H7C5.29,15.1 3.9,13.71 3.9,12C3.9,10.41 5.11,9.1 6.66,8.93L8.73,11H8V13H10.73L13,15.27V17H14.73L18.74,21L20,19.74L3.27,3L2,4.27Z" /></svg>',
+        align_left: '<svg class="se-ci" viewBox="0 0 15.74 13.77"><g><path d="M4.41,4.74v2H20.15v-2H4.41Zm11.8,3.94H4.41v2H16.22v-2Zm-11.8,5.9H18.18v-2H4.41v2Zm0,3.93h9.84v-2H4.41v2Z" transform="translate(-4.41 -4.74)"/></g></svg>',
+        align_center: '<svg class="se-ci" viewBox="0 0 15.74 13.77"><g><path d="M4.41,4.74v2H20.15v-2H4.41Zm2,3.94v2H18.18v-2H6.37Zm-1,5.9H19.16v-2H5.39v2Zm2,3.93H17.2v-2H7.36v2Z" transform="translate(-4.41 -4.74)"/></g></svg>',
+        align_right: '<svg class="se-ci" viewBox="0 0 15.74 13.77"><g><path d="M4.41,4.74v2H20.15v-2H4.41Zm3.93,5.9H20.15v-2H8.34v2Zm-2,3.94H20.14v-2H6.37v2Zm3.94,3.93h9.84v-2H10.31v2Z" transform="translate(-4.41 -4.74)"/></g></svg>',
+        align_justify: '<svg class="se-ci" viewBox="0 0 15.74 13.77"><g><path d="M4.41,4.74v2H20.15v-2H4.41Zm0,5.9H20.15v-2H4.41v2Zm0,3.94H20.15v-2H4.41v2Zm0,3.93h7.87v-2H4.41v2Z" transform="translate(-4.41 -4.74)"/></g></svg>',
+        indent: '<svg viewBox="0 0 24 24"><path d="M11,13H21V11H11M11,9H21V7H11M3,3V5H21V3M11,17H21V15H11M3,8V16L7,12M3,21H21V19H3V21Z" /></svg>',
+        outdent: '<svg viewBox="0 0 24 24"><path d="M11,13H21V11H11M11,9H21V7H11M3,3V5H21V3M3,21H21V19H3M3,12L7,16V8M11,17H21V15H11V17Z" /></svg>',
+        horizontal_line: '<svg class="se-ci" viewBox="0 0 15.74 2.24"><g><path d="M20.15,12.75V10.51H4.41v2.24H20.15Z" transform="translate(-4.41 -10.51)"/></g></svg>',
+        table: '<svg class="se-ci" viewBox="0 0 15.74 15.74"><g><path d="M4.41,8.05V3.76H8.7V8.05H4.41Zm5.71,0V3.76h4.3V8.05h-4.3Zm5.74-4.29h4.29V8.05H15.86V3.76Zm-11.45,10V9.48H8.7v4.3H4.41Zm5.71,0V9.48h4.3v4.3h-4.3Zm5.74,0V9.48h4.29v4.3H15.86ZM4.41,19.5V15.21H8.7V19.5H4.41Zm5.71,0V15.21h4.3V19.5h-4.3Zm5.74,0V15.21h4.29V19.5H15.86Z" transform="translate(-4.41 -3.76)"/></g></svg>',
+        image: '<svg viewBox="0 0 24 24"><path d="M19,19H5V5H19M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.96,12.29L11.21,15.83L9.25,13.47L6.5,17H17.5L13.96,12.29Z" /></svg>',
+        image_gallery: '<svg viewBox="0 0 24 24"><path d="M21,17H7V3H21M21,1H7A2,2 0 0,0 5,3V17A2,2 0 0,0 7,19H21A2,2 0 0,0 23,17V3A2,2 0 0,0 21,1M3,5H1V21A2,2 0 0,0 3,23H19V21H3M15.96,10.29L13.21,13.83L11.25,11.47L8.5,15H19.5L15.96,10.29Z" /></svg>',
+        undo: '<svg viewBox="0 0 24 24"><path d="M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z" /></svg>',
+        redo: '<svg viewBox="0 0 24 24"><path d="M18.4,10.6C16.55,9 14.15,8 11.5,8C6.85,8 2.92,11.03 1.54,15.22L3.9,16C4.95,12.81 7.95,10.5 11.5,10.5C13.45,10.5 15.23,11.22 16.62,12.38L13,16H22V7L18.4,10.6Z" /></svg>',
+        remove_format: '<svg viewBox="0 0 24 24"><path d="M6,5V5.18L8.82,8H11.22L10.5,9.68L12.6,11.78L14.21,8H20V5H6M3.27,5L2,6.27L8.97,13.24L6.5,19H9.5L11.07,15.34L16.73,21L18,19.73L3.55,5.27L3.27,5Z" /></svg>',
+        code_view: '<svg viewBox="0 0 24 24"><path d="M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z" /></svg>',
+        table_properties: '<svg viewBox="0 0 24 24"><path d="M3.88 12L2.2 16.06L6.26 17.74L7.94 21.8L11 20.53V18.36L9 19.19L7.79 16.21L4.81 15L6.05 12L4.81 9L7.79 7.79L9 4.81L12 6.05L15 4.81L16.21 7.79L19.19 9L17.95 12L18 12.13L19.38 10.75C19.82 10.3 20.38 10.06 20.94 10L21.8 7.94L17.74 6.26L16.06 2.2L12 3.88L7.94 2.2L6.26 6.26L2.2 7.94L3.88 12M22.85 13.47L21.53 12.15C21.33 11.95 21 11.95 20.81 12.15L19.83 13.13L21.87 15.17L22.85 14.19C23.05 14 23.05 13.67 22.85 13.47M13 19.96V22H15.04L21.17 15.88L19.13 13.83L13 19.96Z" /></svg>',
+        insert_row_above: '<svg viewBox="0 0 24 24"><path d="M22,14A2,2 0 0,0 20,12H4A2,2 0 0,0 2,14V21H4V19H8V21H10V19H14V21H16V19H20V21H22V14M4,14H8V17H4V14M10,14H14V17H10V14M20,14V17H16V14H20M11,10H13V7H16V5H13V2H11V5H8V7H11V10Z" /></svg>',
+        insert_row_below: '<svg viewBox="0 0 24 24"><path d="M22,10A2,2 0 0,1 20,12H4A2,2 0 0,1 2,10V3H4V5H8V3H10V5H14V3H16V5H20V3H22V10M4,10H8V7H4V10M10,10H14V7H10V10M20,10V7H16V10H20M11,14H13V17H16V19H13V22H11V19H8V17H11V14Z" /></svg>',
+        insert_column_left: '<svg viewBox="0 0 24 24"><path d="M13,2A2,2 0 0,0 11,4V20A2,2 0 0,0 13,22H22V2H13M20,10V14H13V10H20M20,16V20H13V16H20M20,4V8H13V4H20M9,11H6V8H4V11H1V13H4V16H6V13H9V11Z" /></svg>',
+        insert_column_right: '<svg viewBox="0 0 24 24"><path d="M11,2A2,2 0 0,1 13,4V20A2,2 0 0,1 11,22H2V2H11M4,10V14H11V10H4M4,16V20H11V16H4M4,4V8H11V4H4M15,11H18V8H20V11H23V13H20V16H18V13H15V11Z" /></svg>',
+        delete_row: '<svg viewBox="0 0 24 24"><path d="M9.41,13L12,15.59L14.59,13L16,14.41L13.41,17L16,19.59L14.59,21L12,18.41L9.41,21L8,19.59L10.59,17L8,14.41L9.41,13M22,9A2,2 0 0,1 20,11H4A2,2 0 0,1 2,9V6A2,2 0 0,1 4,4H20A2,2 0 0,1 22,6V9M4,9H8V6H4V9M10,9H14V6H10V9M16,9H20V6H16V9Z" /></svg>',
+        delete_column: '<svg viewBox="0 0 24 24"><path d="M4,2H11A2,2 0 0,1 13,4V20A2,2 0 0,1 11,22H4A2,2 0 0,1 2,20V4A2,2 0 0,1 4,2M4,10V14H11V10H4M4,16V20H11V16H4M4,4V8H11V4H4M17.59,12L15,9.41L16.41,8L19,10.59L21.59,8L23,9.41L20.41,12L23,14.59L21.59,16L19,13.41L16.41,16L15,14.59L17.59,12Z" /></svg>',
+        delete: '<svg class="se-ci" viewBox="0 0 15.73 15.74"><g><path d="M19.16,6.71a.94.94,0,0,0,.69-.28.91.91,0,0,0,.29-.68A1,1,0,0,0,19.85,5a.93.93,0,0,0-.69-.3H14.24A.94.94,0,0,0,14,4.06a.92.92,0,0,0-.7-.3h-2a1,1,0,0,0-.7.3.93.93,0,0,0-.28.68H5.39A.92.92,0,0,0,4.7,5a1,1,0,0,0-.29.71.91.91,0,0,0,.29.68,1,1,0,0,0,.69.28H19.16Zm-12.79,1a1,1,0,0,0-.7.3.94.94,0,0,0-.28.69v8.85A1.88,1.88,0,0,0,6,18.93a1.9,1.9,0,0,0,1.39.57H17.2a1.87,1.87,0,0,0,1.39-.58,1.91,1.91,0,0,0,.58-1.39V8.68A1,1,0,0,0,18.88,8a.89.89,0,0,0-.7-.29,1,1,0,0,0-.69.29.92.92,0,0,0-.29.68v7.87a1,1,0,0,1-1,1H8.34a.94.94,0,0,1-.69-.28,1,1,0,0,1-.29-.71V8.68a1,1,0,0,0-1-1Z" transform="translate(-4.41 -3.76)"/></g></svg>'
+    };
+
+    /**
      * Toolbar button definitions
      * @type {Object}
      */
     static toolbarButtons = {
-        bold: { icon: '<b>B</b>', title: 'Bold (Ctrl+B)', command: 'bold' },
-        italic: { icon: '<i>I</i>', title: 'Italic (Ctrl+I)', command: 'italic' },
-        underline: { icon: '<u>U</u>', title: 'Underline (Ctrl+U)', command: 'underline' },
-        strikethrough: { icon: '<s>S</s>', title: 'Strikethrough', command: 'strikeThrough' },
-        subscript: { icon: 'X<sub>2</sub>', title: 'Subscript', command: 'subscript', custom: true },
-        superscript: { icon: 'X<sup>2</sup>', title: 'Superscript', command: 'superscript', custom: true },
+        bold: { icon: StarEditor.icons.bold, title: 'Bold (Ctrl+B)', command: 'bold' },
+        italic: { icon: StarEditor.icons.italic, title: 'Italic (Ctrl+I)', command: 'italic' },
+        underline: { icon: StarEditor.icons.underline, title: 'Underline (Ctrl+U)', command: 'underline' },
+        strikethrough: { icon: StarEditor.icons.strike, title: 'Strikethrough', command: 'strikeThrough' },
+        subscript: { icon: StarEditor.icons.subscript, title: 'Subscript', command: 'subscript', custom: true },
+        superscript: { icon: StarEditor.icons.superscript, title: 'Superscript', command: 'superscript', custom: true },
         h1: { icon: 'H1', title: 'Heading 1', command: 'formatBlock', value: 'h1' },
         h2: { icon: 'H2', title: 'Heading 2', command: 'formatBlock', value: 'h2' },
         h3: { icon: 'H3', title: 'Heading 3', command: 'formatBlock', value: 'h3' },
         h4: { icon: 'H4', title: 'Heading 4', command: 'formatBlock', value: 'h4' },
         h5: { icon: 'H5', title: 'Heading 5', command: 'formatBlock', value: 'h5' },
         h6: { icon: 'H6', title: 'Heading 6', command: 'formatBlock', value: 'h6' },
-        blockquote: { icon: '&#8220;', title: 'Block Quote', command: 'formatBlock', value: 'blockquote' },
-        pre: { icon: '&#9001;/&#9002;', title: 'Preformatted Block', command: 'formatBlock', value: 'pre' },
-        ul: { icon: '&#8226;', title: 'Bullet List', command: 'insertUnorderedList' },
-        ol: { icon: '1.', title: 'Numbered List', command: 'insertOrderedList' },
-        hr: { icon: '&#8213;', title: 'Horizontal Rule', command: 'insertHorizontalRule' },
-        link: { icon: '&#128279;', title: 'Insert Link (Ctrl+K)', command: 'link', custom: true },
-        unlink: { icon: '&#10060;', title: 'Remove Link', command: 'unlink' },
-        alignLeft: { icon: '&#8676;', title: 'Align Left', command: 'justifyLeft' },
-        alignCenter: { icon: '&#8596;', title: 'Align Center', command: 'justifyCenter' },
-        alignRight: { icon: '&#8677;', title: 'Align Right', command: 'justifyRight' },
-        justifyFull: { icon: '&#9776;', title: 'Justify', command: 'justifyFull' },
-        indent: { icon: '&#8680;', title: 'Increase Indent', command: 'indent', custom: true },
-        outdent: { icon: '&#8678;', title: 'Decrease Indent', command: 'outdent', custom: true },
-        undo: { icon: '&#8617;', title: 'Undo (Ctrl+Z)', command: 'undo' },
-        redo: { icon: '&#8618;', title: 'Redo (Ctrl+Y)', command: 'redo' },
-        clearFormat: { icon: 'T&#824;', title: 'Clear Formatting', command: 'removeFormat', custom: true },
-        fontSize: { icon: 'A<small>&#9662;</small>', title: 'Font Size', command: 'fontSize', custom: true, type: 'dropdown' },
-        fontName: { icon: 'F<small>&#9662;</small>', title: 'Font Family', command: 'fontName', custom: true, type: 'dropdown' },
-        textColor: { icon: '<span style="border-bottom:3px solid #000">A</span>', title: 'Text Color', command: 'foreColor', custom: true, type: 'colorPicker' },
-        bgColor: { icon: '<span style="background:#ff0;padding:0 2px">A</span>', title: 'Background Color', command: 'backColor', custom: true, type: 'colorPicker' },
-        table: { icon: '&#9638;', title: 'Insert Table', command: 'insertTable', custom: true },
-        image: { icon: '&#128247;', title: 'Insert Image', command: 'insertImage', custom: true },
-        gallery: { icon: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>', title: 'Insert gallery', command: 'insertGallery', custom: true },
-        codeView: { icon: '&lt;/&gt;', title: 'View HTML Source', command: 'codeView', custom: true },
-        heading: { icon: 'H<small>&#9662;</small>', title: 'Heading', command: 'heading', custom: true, type: 'dropdown', groupItems: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] },
-        alignment: { icon: '&#8676;<small>&#9662;</small>', title: 'Alignment', command: 'alignment', custom: true, type: 'dropdown', groupItems: ['alignLeft', 'alignCenter', 'alignRight', 'justifyFull'], activeIgnore: ['alignLeft'] },
+        blockquote: { icon: StarEditor.icons.blockquote, title: 'Block Quote', command: 'formatBlock', value: 'blockquote' },
+        pre: { icon: StarEditor.icons.code_block, title: 'Preformatted Block', command: 'formatBlock', value: 'pre' },
+        ul: { icon: StarEditor.icons.list_bulleted, title: 'Bullet List', command: 'insertUnorderedList' },
+        ol: { icon: StarEditor.icons.list_numbered, title: 'Numbered List', command: 'insertOrderedList' },
+        hr: { icon: StarEditor.icons.horizontal_line, title: 'Horizontal Rule', command: 'insertHorizontalRule' },
+        link: { icon: StarEditor.icons.link, title: 'Insert Link (Ctrl+K)', command: 'link', custom: true },
+        unlink: { icon: StarEditor.icons.unlink, title: 'Remove Link', command: 'unlink' },
+        alignLeft: { icon: StarEditor.icons.align_left, title: 'Align Left', command: 'justifyLeft' },
+        alignCenter: { icon: StarEditor.icons.align_center, title: 'Align Center', command: 'justifyCenter' },
+        alignRight: { icon: StarEditor.icons.align_right, title: 'Align Right', command: 'justifyRight' },
+        justifyFull: { icon: StarEditor.icons.align_justify, title: 'Justify', command: 'justifyFull' },
+        indent: { icon: StarEditor.icons.indent, title: 'Increase Indent', command: 'indent', custom: true },
+        outdent: { icon: StarEditor.icons.outdent, title: 'Decrease Indent', command: 'outdent', custom: true },
+        undo: { icon: StarEditor.icons.undo, title: 'Undo (Ctrl+Z)', command: 'undo' },
+        redo: { icon: StarEditor.icons.redo, title: 'Redo (Ctrl+Y)', command: 'redo' },
+        clearFormat: { icon: StarEditor.icons.remove_format, title: 'Clear Formatting', command: 'removeFormat', custom: true },
+        fontSize: { icon: null, title: 'Font Size', command: 'fontSize', custom: true, type: 'dropdown' },
+        fontName: { icon: null, title: 'Font Family', command: 'fontName', custom: true, type: 'dropdown' },
+        textColor: { icon: StarEditor.icons.font_color, title: 'Text Color', command: 'foreColor', custom: true, type: 'colorPicker' },
+        bgColor: { icon: StarEditor.icons.background_color, title: 'Background Color', command: 'backColor', custom: true, type: 'colorPicker' },
+        table: { icon: StarEditor.icons.table, title: 'Insert Table', command: 'insertTable', custom: true },
+        image: { icon: StarEditor.icons.image, title: 'Insert Image', command: 'insertImage', custom: true },
+        gallery: { icon: StarEditor.icons.image_gallery, title: 'Insert gallery', command: 'insertGallery', custom: true },
+        codeView: { icon: StarEditor.icons.code_view, title: 'View HTML Source', command: 'codeView', custom: true },
+        heading: { icon: StarEditor.icons.text_style + StarEditor.icons.menu_arrow_down.replace('<svg ', '<svg class="star-caret" '), title: 'Heading', command: 'heading', custom: true, type: 'dropdown', groupItems: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] },
+        alignment: { icon: StarEditor.icons.align_left + StarEditor.icons.menu_arrow_down.replace('<svg ', '<svg class="star-caret" '), title: 'Alignment', command: 'alignment', custom: true, type: 'dropdown', groupItems: ['alignLeft', 'alignCenter', 'alignRight', 'justifyFull'], activeIgnore: ['alignLeft'] },
         '|': { type: 'separator' }
     };
 
@@ -416,6 +466,7 @@ class StarEditor {
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            gap: 2px;
             min-width: 32px;
             height: 32px;
             padding: 4px 8px;
@@ -441,6 +492,33 @@ class StarEditor {
         .star-btn-disabled {
             opacity: 0.4;
             pointer-events: none;
+        }
+        .star-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            display: block;
+            flex-shrink: 0;
+        }
+        .star-btn svg.se-ci {
+            width: 14px;
+            height: 14px;
+        }
+        .star-btn svg.star-caret {
+            width: 8px;
+            height: 8px;
+            margin-left: 1px;
+            flex-shrink: 0;
+        }
+        .star-btn .star-svg-color-bar {
+            fill: #000;
+        }
+        .star-btn-label {
+            font-size: 13px;
+            max-width: 90px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         .star-separator {
             display: inline-block;
@@ -515,6 +593,9 @@ class StarEditor {
             max-width: 320px;
         }
         .star-table-toolbar-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
             background: #f5f5f5;
             border: 1px solid #ddd;
             border-radius: 3px;
@@ -525,6 +606,16 @@ class StarEditor {
         }
         .star-table-toolbar-btn:hover {
             background: #e0e0e0;
+        }
+        .star-table-toolbar-btn svg {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+        .star-table-toolbar-btn svg.se-ci {
+            width: 12px;
+            height: 12px;
         }
         .star-table-toolbar-separator {
             width: 1px;
@@ -570,12 +661,25 @@ class StarEditor {
             display: block;
         }
         .star-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             padding: 8px 12px;
             cursor: pointer;
             white-space: nowrap;
         }
         .star-dropdown-item:hover {
             background: #f0f0f0;
+        }
+        .star-dropdown-item svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+        .star-dropdown-item svg.se-ci {
+            width: 13px;
+            height: 13px;
         }
         .star-color-picker {
             position: absolute;
@@ -897,6 +1001,15 @@ class StarEditor {
         .star-image-toolbar-btn:hover {
             background: #f0f0f0;
         }
+        .star-image-toolbar-btn svg {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+        }
+        .star-image-toolbar-btn svg.se-ci {
+            width: 12px;
+            height: 12px;
+        }
         .star-image-resizer {
             position: absolute;
             z-index: 999;
@@ -1157,6 +1270,10 @@ class StarEditor {
         if (this.textarea.value) {
             this.editor.innerHTML = this.sanitizeEditorUI(this.textarea.value);
         }
+
+        // Font size / font family triggers need a real value as soon as the editor
+        // exists — buildToolbar() ran before this.editor was created and couldn't show one.
+        this.updateToolbarState();
     }
 
     /**
@@ -1306,7 +1423,14 @@ class StarEditor {
         btn.dataset.custom = 'true';
         btn.dataset.dropdownTrigger = name;
         btn.title = this.t('toolbar.' + name) || def.title;
-        btn.innerHTML = def.icon;
+
+        if (name === 'fontSize' || name === 'fontName') {
+            // These two triggers show the current value instead of a fixed icon.
+            btn.innerHTML = `<span class="${prefix}-btn-label"></span>` + StarEditor.icons.menu_arrow_down;
+            this.updateFontTriggerLabel(btn, name);
+        } else {
+            btn.innerHTML = def.icon;
+        }
 
         const dropdown = document.createElement('div');
         dropdown.className = `${prefix}-dropdown`;
@@ -1370,6 +1494,13 @@ class StarEditor {
         btn.dataset.colorPickerTrigger = name;
         btn.title = this.t('toolbar.' + name) || def.title;
         btn.innerHTML = def.icon;
+
+        // Default color bar: black for text color, yellow for background color —
+        // mirrors the pre-SVG icons' default hint before any color has been picked.
+        const bar = btn.querySelector('.star-svg-color-bar');
+        if (bar && name === 'bgColor') {
+            bar.style.fill = '#ffff00';
+        }
 
         const picker = document.createElement('div');
         picker.className = `${prefix}-color-picker`;
@@ -1999,6 +2130,13 @@ class StarEditor {
             } else {
                 document.execCommand('backColor', false, color);
             }
+        }
+
+        // Reflect the picked color on the button's icon, same as SunEditor's own color buttons
+        const trigger = this.toolbar.querySelector(`[data-color-picker-trigger="${name}"]`);
+        const bar = trigger && trigger.querySelector('.star-svg-color-bar');
+        if (bar) {
+            bar.style.fill = color === 'transparent' ? '#ffff00' : color;
         }
 
         this.sync();
@@ -3251,7 +3389,7 @@ class StarEditor {
             <button type="button" class="${prefix}-image-toolbar-btn" data-action="edit-alt" title="${this.t('imageToolbar.editAlt')}">Alt</button>
             <button type="button" class="${prefix}-image-toolbar-btn" data-action="resize-50" title="${this.t('imageToolbar.resize50')}">50%</button>
             <button type="button" class="${prefix}-image-toolbar-btn" data-action="resize-100" title="${this.t('imageToolbar.resize100')}">100%</button>
-            <button type="button" class="${prefix}-image-toolbar-btn" data-action="delete" title="${this.t('imageToolbar.delete')}">&#10060;</button>
+            <button type="button" class="${prefix}-image-toolbar-btn" data-action="delete" title="${this.t('imageToolbar.delete')}">${StarEditor.icons.delete}</button>
         `;
 
         // Position toolbar above the image
@@ -3545,16 +3683,16 @@ class StarEditor {
         this.tableToolbar = document.createElement('div');
         this.tableToolbar.className = `${prefix}-table-toolbar`;
         this.tableToolbar.innerHTML = `
-            <button type="button" class="${prefix}-table-toolbar-btn" data-action="properties" title="${this.t('tableToolbar.properties')}">${this.t('tableToolbar.propertiesLabel')}</button>
+            <button type="button" class="${prefix}-table-toolbar-btn" data-action="properties" title="${this.t('tableToolbar.properties')}">${StarEditor.icons.table_properties}${this.t('tableToolbar.propertiesLabel')}</button>
             <span class="${prefix}-table-toolbar-separator"></span>
-            <button type="button" class="${prefix}-table-toolbar-btn" data-action="row-above" title="${this.t('tableToolbar.rowAbove')}">${this.t('tableToolbar.rowAboveLabel')}</button>
-            <button type="button" class="${prefix}-table-toolbar-btn" data-action="row-below" title="${this.t('tableToolbar.rowBelow')}">${this.t('tableToolbar.rowBelowLabel')}</button>
-            <button type="button" class="${prefix}-table-toolbar-btn" data-action="col-left" title="${this.t('tableToolbar.colLeft')}">${this.t('tableToolbar.colLeftLabel')}</button>
-            <button type="button" class="${prefix}-table-toolbar-btn" data-action="col-right" title="${this.t('tableToolbar.colRight')}">${this.t('tableToolbar.colRightLabel')}</button>
+            <button type="button" class="${prefix}-table-toolbar-btn" data-action="row-above" title="${this.t('tableToolbar.rowAbove')}">${StarEditor.icons.insert_row_above}${this.t('tableToolbar.rowAboveLabel')}</button>
+            <button type="button" class="${prefix}-table-toolbar-btn" data-action="row-below" title="${this.t('tableToolbar.rowBelow')}">${StarEditor.icons.insert_row_below}${this.t('tableToolbar.rowBelowLabel')}</button>
+            <button type="button" class="${prefix}-table-toolbar-btn" data-action="col-left" title="${this.t('tableToolbar.colLeft')}">${StarEditor.icons.insert_column_left}${this.t('tableToolbar.colLeftLabel')}</button>
+            <button type="button" class="${prefix}-table-toolbar-btn" data-action="col-right" title="${this.t('tableToolbar.colRight')}">${StarEditor.icons.insert_column_right}${this.t('tableToolbar.colRightLabel')}</button>
             <span class="${prefix}-table-toolbar-separator"></span>
-            <button type="button" class="${prefix}-table-toolbar-btn" data-action="delete-row" title="${this.t('tableToolbar.deleteRow')}">${this.t('tableToolbar.deleteRowLabel')}</button>
-            <button type="button" class="${prefix}-table-toolbar-btn" data-action="delete-col" title="${this.t('tableToolbar.deleteCol')}">${this.t('tableToolbar.deleteColLabel')}</button>
-            <button type="button" class="${prefix}-table-toolbar-btn" data-action="delete-table" title="${this.t('tableToolbar.deleteTable')}">${this.t('tableToolbar.deleteTableLabel')}</button>
+            <button type="button" class="${prefix}-table-toolbar-btn" data-action="delete-row" title="${this.t('tableToolbar.deleteRow')}">${StarEditor.icons.delete_row}${this.t('tableToolbar.deleteRowLabel')}</button>
+            <button type="button" class="${prefix}-table-toolbar-btn" data-action="delete-col" title="${this.t('tableToolbar.deleteCol')}">${StarEditor.icons.delete_column}${this.t('tableToolbar.deleteColLabel')}</button>
+            <button type="button" class="${prefix}-table-toolbar-btn" data-action="delete-table" title="${this.t('tableToolbar.deleteTable')}">${StarEditor.icons.delete}${this.t('tableToolbar.deleteTableLabel')}</button>
         `;
 
         // Position toolbar above the table
@@ -4079,6 +4217,12 @@ class StarEditor {
             btn.classList.remove(activeClass);
 
             const groupKey = btn.dataset.dropdownTrigger;
+
+            if (groupKey === 'fontSize' || groupKey === 'fontName') {
+                this.updateFontTriggerLabel(btn, groupKey);
+                return;
+            }
+
             const groupDef = groupKey ? StarEditor.toolbarButtons[groupKey] : null;
 
             if (groupDef && groupDef.groupItems) {
@@ -4097,6 +4241,47 @@ class StarEditor {
                 btn.classList.add(activeClass);
             }
         });
+    }
+
+    /**
+     * Refresh a Font Size / Font Family trigger button's value label to reflect
+     * the computed style at the current selection, falling back to the editor's
+     * own baseline style when the selection isn't inside it.
+     *
+     * @param {HTMLElement} btn - The dropdown trigger button
+     * @param {string} name - 'fontSize' or 'fontName'
+     * @private
+     */
+    updateFontTriggerLabel(btn, name) {
+        const label = btn.querySelector(`.${this.config.classPrefix}-btn-label`);
+        // The dropdown trigger is built during buildToolbar(), before this.editor exists;
+        // init() calls updateToolbarState() again once the editor is live, which re-enters
+        // here with a real value.
+        if (!label || !this.editor) return;
+
+        let el = this.editor;
+        const selection = window.getSelection();
+        if (selection.rangeCount) {
+            const node = selection.anchorNode;
+            if (node && this.editor.contains(node)) {
+                el = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+                if (!el || !this.editor.contains(el)) {
+                    el = this.editor;
+                }
+            }
+        }
+
+        const computed = getComputedStyle(el);
+
+        if (name === 'fontSize') {
+            label.textContent = `${Math.round(parseFloat(computed.fontSize))}px`;
+        } else {
+            const firstFamily = computed.fontFamily.split(',')[0].trim().replace(/^["']|["']$/g, '').toLowerCase();
+            const match = this.config.fontFamilies.find(font =>
+                font.value.split(',')[0].trim().replace(/^["']|["']$/g, '').toLowerCase() === firstFamily
+            );
+            label.textContent = match ? match.label : (this.t('toolbar.fontNameDefault') || 'Font');
+        }
     }
 
     /**

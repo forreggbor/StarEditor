@@ -66,6 +66,10 @@ The editor automatically syncs its HTML content to the textarea on form submissi
 | [Images & Galleries](doc/IMAGES-AND-GALLERIES.md) | Server image gallery, gallery picker, image insert hook, content transform hooks |
 | [API Reference](doc/API.md) | Constructor, instance methods, static methods, keyboard shortcuts |
 
+## Credits
+
+Toolbar icons adapted from [SunEditor](https://github.com/JiHong88/SunEditor) (MIT License, © 2017–2025 Yi JiHong).
+
 ## License
 
 [MIT](LICENSE) — © 2026 PatrikMol Solutions Kft.
