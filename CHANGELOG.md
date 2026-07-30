@@ -5,6 +5,23 @@ All notable changes to StarEditor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-07-30
+
+### Summary
+
+| Category | Description                                                                    |
+|----------|---------------------------------------------------------------------------------|
+| Removed  | The toolbar can no longer be customized from the embedding application          |
+| Changed  | The toolbar now always shows every available feature, in a fixed layout         |
+| Changed  | The gallery button now appears automatically once a gallery source is set up    |
+
+### Removed
+- The toolbar can no longer be customized from the embedding application (closes #5). Any custom toolbar setting passed in is now ignored, and a one-time warning is logged in the browser console to flag it.
+
+### Changed
+- ⚠️ BREAKING: The toolbar now always shows every available feature, in a fixed, consistent layout across every embedding, instead of a per-application selection.
+- The gallery button now appears automatically whenever a gallery source is configured, instead of needing to be added manually to a custom toolbar setting.
+
 ## [2.9.0] - 2026-07-29
 
 ### Summary

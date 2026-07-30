@@ -313,11 +313,10 @@ Calling with two arguments (`url`, `alt`) is unchanged from earlier versions —
 
 The gallery picker adds a dedicated toolbar button that opens a modal where editors can browse and insert galleries (photo albums, collections, etc.). The reusable handles all fetch, pagination, and modal UI — the host application only needs to configure the source and control what gets inserted.
 
-Enable by adding `'gallery'` to `toolbar` and setting `serverGalleries`:
+Enable by setting `serverGalleries` — the gallery button appears automatically:
 
 ```javascript
 new StarEditor('#content', {
-    toolbar: ['bold', 'italic', '|', 'image', 'gallery', '|', 'codeView'],
     serverGalleries: '/admin/galleries/api',
     serverGalleriesPageSize: 12,    // default
     onGalleryInsert: function({ gallery }) {
@@ -509,17 +508,6 @@ var galleryCache = {};  // populated before editor init
                 imageUpload:  true,
                 serverImages: '/admin/media/editor-api',
                 serverGalleries: '/admin/galeria/api',
-
-                toolbar: [
-                    'bold', 'italic', 'underline', 'strikethrough', '|',
-                    'h2', 'h3', 'h4', '|',
-                    'ul', 'ol', 'blockquote', '|',
-                    'link', 'unlink', 'image', 'gallery', '|',
-                    'alignLeft', 'alignCenter', 'alignRight', '|',
-                    'table', 'hr', '|',
-                    'undo', 'redo', '|',
-                    'clearFormat', 'codeView'
-                ],
 
                 onImageInsert: function(data) {
                     // Only customise server-sourced images (media library)

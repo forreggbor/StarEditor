@@ -5,7 +5,7 @@
  * using native browser APIs (contenteditable, execCommand).
  *
  * @package StarEditor
- * @version 2.9.0
+ * @version 3.0.0
  * @license MIT
  */
 class StarEditor {
@@ -16,23 +16,16 @@ class StarEditor {
     static stylesInjected = false;
 
     /**
+     * Whether the removed-`toolbar`-option deprecation warning has already been logged
+     * @type {boolean}
+     */
+    static toolbarOptionWarned = false;
+
+    /**
      * Default configuration options
      * @type {Object}
      */
     static defaults = {
-        toolbar: [
-            'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
-            'fontSize', 'fontName', '|',
-            'textColor', 'bgColor', '|',
-            'heading', '|',
-            'ul', 'ol', 'blockquote', 'pre', '|',
-            'link', 'unlink', '|',
-            'alignment', '|',
-            'indent', 'outdent', '|',
-            'hr', 'table', 'image', '|',
-            'undo', 'redo', '|',
-            'clearFormat', 'codeView'
-        ],
         placeholder: '',
         pasteAsPlainText: false,
         minHeight: '200px',
@@ -335,6 +328,24 @@ class StarEditor {
             'modal.galleryNotConfigured': 'Galériaforrás nincs beállítva.'
         }
     };
+
+    /**
+     * Fixed toolbar layout — always rendered in full, identical across every embedding.
+     * @type {string[]}
+     */
+    static toolbarLayout = [
+        'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
+        'fontSize', 'fontName', '|',
+        'textColor', 'bgColor', '|',
+        'heading', '|',
+        'ul', 'ol', 'blockquote', 'pre', '|',
+        'link', 'unlink', '|',
+        'alignment', '|',
+        'indent', 'outdent', '|',
+        'hr', 'table', 'image', 'gallery', '|',
+        'undo', 'redo', '|',
+        'clearFormat', 'codeView'
+    ];
 
     /**
      * Toolbar button definitions
@@ -1091,9 +1102,15 @@ class StarEditor {
         this.textarea = textarea;
         this.config = { ...StarEditor.defaults, ...options };
 
-        // Resolve 'all' shorthand in toolbar to include all available buttons
-        if (this.config.toolbar.includes('all')) {
-            this.config.toolbar = [...StarEditor.defaults.toolbar];
+        // The toolbar is no longer host-configurable (removed in v3.0.0) — it is always
+        // rendered in full via the fixed static toolbarLayout. Warn once if a host still
+        // passes the removed option, then drop it so no stale key survives on this.config.
+        if ('toolbar' in options) {
+            if (!StarEditor.toolbarOptionWarned) {
+                console.warn('StarEditor: the `toolbar` option was removed in v3.0.0 — the toolbar is always shown in full and can no longer be customized.');
+                StarEditor.toolbarOptionWarned = true;
+            }
+            delete this.config.toolbar;
         }
 
         // Resolve locale: 'auto' detects from browser, defaults to 'en'
@@ -1178,7 +1195,11 @@ class StarEditor {
         this.toolbar = document.createElement('div');
         this.toolbar.className = `${this.config.classPrefix}-toolbar`;
 
-        this.config.toolbar.forEach(item => {
+        StarEditor.toolbarLayout.forEach(item => {
+            // The gallery button requires a configured gallery source — without it, the
+            // picker modal has nothing to show, so skip it (feature flag, not toolbar composition).
+            if (item === 'gallery' && !this.config.serverGalleries) return;
+
             const def = StarEditor.toolbarButtons[item];
             if (!def) return;
 

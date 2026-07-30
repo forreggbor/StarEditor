@@ -2,8 +2,6 @@
 
 - [Options](#options)
 - [Toolbar](#toolbar)
-  - [Default toolbar](#default-toolbar)
-  - [Available buttons](#available-buttons)
 - [Styling](#styling)
 - [Localization](#localization)
 - [Examples](#examples)
@@ -14,7 +12,6 @@
 
 ```javascript
 const editor = new StarEditor(document.getElementById('content'), {
-    toolbar: ['bold', 'italic', '|', 'link', 'image', '|', 'codeView'],
     placeholder: 'Start typing...',
     pasteAsPlainText: false,
     minHeight: '200px',
@@ -51,7 +48,6 @@ const editor = new StarEditor(document.getElementById('content'), {
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `toolbar` | Array | See [Default toolbar](#default-toolbar) | Toolbar buttons to display |
 | `placeholder` | String | `''` | Placeholder text when editor is empty |
 | `pasteAsPlainText` | Boolean | `false` | Strip formatting when pasting |
 | `minHeight` | String | `'200px'` | Minimum editor height |
@@ -84,27 +80,8 @@ const editor = new StarEditor(document.getElementById('content'), {
 
 ## Toolbar
 
-### Default toolbar
-
-```javascript
-[
-    'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript', '|',
-    'fontSize', 'fontName', '|',
-    'textColor', 'bgColor', '|',
-    'heading', '|',
-    'ul', 'ol', 'blockquote', 'pre', '|',
-    'link', 'unlink', '|',
-    'alignment', '|',
-    'indent', 'outdent', '|',
-    'hr', 'table', 'image', '|',
-    'undo', 'redo', '|',
-    'clearFormat', 'codeView'
-]
-```
-
-Use `'all'` as a shorthand to include every button in the default order.
-
-### Available buttons
+The toolbar is fixed and always shown in full — every embedding gets the identical, complete set
+of buttons, in this order:
 
 | Button | Description |
 |--------|-------------|
@@ -118,31 +95,28 @@ Use `'all'` as a shorthand to include every button in the default order.
 | `fontName` | Font family dropdown |
 | `textColor` | Text color picker |
 | `bgColor` | Background/highlight color picker |
-| `heading` | Heading level dropdown (H1–H6) — shown by default instead of 6 separate buttons |
-| `h1` – `h6` | Individual heading levels 1–6 (for a custom toolbar not using the `heading` dropdown) |
+| `heading` | Heading level dropdown, containing H1–H6 |
 | `blockquote` | Block quote |
 | `pre` | Preformatted code block |
 | `ul` | Unordered (bullet) list |
 | `ol` | Ordered (numbered) list |
-| `hr` | Horizontal rule |
 | `link` | Insert hyperlink |
 | `unlink` | Remove hyperlink |
-| `alignment` | Text alignment dropdown (left/center/right/justify) — shown by default instead of 4 separate buttons |
-| `alignLeft` | Align text left (for a custom toolbar not using the `alignment` dropdown) |
-| `alignCenter` | Align text center |
-| `alignRight` | Align text right |
-| `justifyFull` | Justify text |
+| `alignment` | Text alignment dropdown, containing left/center/right/justify |
 | `indent` | Increase indentation |
 | `outdent` | Decrease indentation |
+| `hr` | Horizontal rule |
 | `table` | Insert table |
 | `image` | Insert image |
-| `gallery` | Open gallery picker (requires `serverGalleries`) |
+| `gallery` | Open gallery picker — shown only when `serverGalleries` is configured |
 | `undo` | Undo last action |
 | `redo` | Redo last action |
 | `clearFormat` | Remove all formatting |
 | `codeView` | Toggle HTML source view |
-| `all` | Include all buttons (shorthand) |
-| `\|` | Separator (vertical line) |
+
+The toolbar can no longer be customized from the host — there is no `toolbar` option. See
+[archive/toolbar-customization](../archive/toolbar-customization/README.md) for the removed
+per-host configuration this replaced.
 
 ---
 
@@ -179,22 +153,6 @@ All tooltips, modal labels, button texts, prompts, and error messages are transl
 ---
 
 ## Examples
-
-### All buttons
-
-```javascript
-new StarEditor('#content', {
-    toolbar: ['all']
-});
-```
-
-### Minimal toolbar
-
-```javascript
-new StarEditor('#content', {
-    toolbar: ['bold', 'italic', '|', 'link']
-});
-```
 
 ### Multiple editors
 

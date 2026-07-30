@@ -8,7 +8,7 @@ A lightweight, zero-dependency WYSIWYG rich text editor for textarea elements, b
 
 - Zero dependencies — pure vanilla JavaScript
 - Transforms any `<textarea>` into a rich text editor
-- Fully customizable toolbar
+- Complete, consistent toolbar — every feature is always available
 - Font size, font family, text and background color
 - Tables — insert, edit properties, add/remove rows and columns
 - Images — server gallery, local upload (base64), URL; resize by dragging; alt text editing
