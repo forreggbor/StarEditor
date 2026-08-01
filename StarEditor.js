@@ -5,7 +5,7 @@
  * using native browser APIs (contenteditable, execCommand).
  *
  * @package StarEditor
- * @version 3.2.1
+ * @version 3.2.2
  * @license MIT
  */
 class StarEditor {
@@ -684,8 +684,13 @@ class StarEditor {
             cursor: pointer;
             white-space: nowrap;
         }
-        .star-dropdown-item:hover {
+        .star-dropdown-item:hover,
+        .star-dropdown-item:focus {
             background: #f0f0f0;
+        }
+        .star-dropdown-item:focus {
+            outline: 2px solid #007bff;
+            outline-offset: -2px;
         }
         .star-dropdown-item svg {
             width: 16px;
@@ -1443,6 +1448,8 @@ class StarEditor {
         btn.dataset.custom = 'true';
         btn.dataset.dropdownTrigger = name;
         btn.title = this.t('toolbar.' + name) || def.title;
+        btn.setAttribute('aria-haspopup', 'true');
+        btn.setAttribute('aria-expanded', 'false');
 
         if (name === 'fontSize' || name === 'fontName') {
             // These two triggers show the current value instead of a fixed icon.
@@ -1455,6 +1462,7 @@ class StarEditor {
         const dropdown = document.createElement('div');
         dropdown.className = `${prefix}-dropdown`;
         dropdown.dataset.dropdown = name;
+        dropdown.setAttribute('role', 'menu');
 
         // Populate dropdown items based on button type
         if (def.groupItems) {
@@ -1465,6 +1473,8 @@ class StarEditor {
                 item.dataset.value = key;
                 item.title = this.t('toolbar.' + key) || itemDef.title;
                 item.innerHTML = itemDef.icon;
+                item.setAttribute('role', 'menuitem');
+                item.tabIndex = -1;
                 dropdown.appendChild(item);
             });
         } else if (name === 'fontSize') {
@@ -1474,6 +1484,8 @@ class StarEditor {
                 item.dataset.value = size;
                 item.textContent = size;
                 item.style.fontSize = size;
+                item.setAttribute('role', 'menuitem');
+                item.tabIndex = -1;
                 dropdown.appendChild(item);
             });
         } else if (name === 'fontName') {
@@ -1483,6 +1495,8 @@ class StarEditor {
                 item.dataset.value = font.value;
                 item.textContent = font.label;
                 item.style.fontFamily = font.value;
+                item.setAttribute('role', 'menuitem');
+                item.tabIndex = -1;
                 dropdown.appendChild(item);
             });
         }
@@ -1631,6 +1645,10 @@ class StarEditor {
 
         // Keyboard shortcuts
         this.editor.addEventListener('keydown', (e) => this.handleKeyboard(e));
+
+        // Keyboard navigation inside open dropdown menus (WAI-ARIA menu pattern):
+        // arrow keys move roving-tabindex focus, Enter/Space selects, Escape closes.
+        this.toolbar.addEventListener('keydown', (e) => this.handleDropdownKeyboard(e));
 
         // Paste handling
         this.editor.addEventListener('paste', (e) => this.handlePaste(e));
@@ -2042,6 +2060,77 @@ class StarEditor {
 
         if (!isOpen) {
             dropdown.classList.add(`${prefix}-dropdown-open`);
+            const trigger = this.toolbar.querySelector(`[data-dropdown-trigger="${name}"]`);
+            if (trigger) trigger.setAttribute('aria-expanded', 'true');
+            this.focusDropdownItem(dropdown, dropdown.querySelector(`.${prefix}-dropdown-item`));
+        }
+    }
+
+    /**
+     * Move roving-tabindex focus to a dropdown item, so exactly one
+     * .star-dropdown-item is Tab-reachable at a time (WAI-ARIA menu pattern).
+     *
+     * @param {HTMLElement} dropdown - The open dropdown element
+     * @param {HTMLElement|null} item - The item to focus
+     * @private
+     */
+    focusDropdownItem(dropdown, item) {
+        if (!item) return;
+        const prefix = this.config.classPrefix;
+        dropdown.querySelectorAll(`.${prefix}-dropdown-item`).forEach(el => {
+            el.tabIndex = -1;
+        });
+        item.tabIndex = 0;
+        item.focus();
+    }
+
+    /**
+     * Handle keyboard navigation within an open dropdown menu.
+     *
+     * @param {KeyboardEvent} e - The keydown event
+     * @private
+     */
+    handleDropdownKeyboard(e) {
+        const prefix = this.config.classPrefix;
+        const item = e.target.closest(`.${prefix}-dropdown-item`);
+        if (!item) return;
+
+        const dropdown = item.closest(`.${prefix}-dropdown`);
+        const items = Array.from(dropdown.querySelectorAll(`.${prefix}-dropdown-item`));
+        const index = items.indexOf(item);
+
+        switch (e.key) {
+            case 'ArrowDown':
+                e.preventDefault();
+                this.focusDropdownItem(dropdown, items[(index + 1) % items.length]);
+                break;
+            case 'ArrowUp':
+                e.preventDefault();
+                this.focusDropdownItem(dropdown, items[(index - 1 + items.length) % items.length]);
+                break;
+            case 'Home':
+                e.preventDefault();
+                this.focusDropdownItem(dropdown, items[0]);
+                break;
+            case 'End':
+                e.preventDefault();
+                this.focusDropdownItem(dropdown, items[items.length - 1]);
+                break;
+            case 'Enter':
+            case ' ':
+                e.preventDefault();
+                this.handleDropdownSelect(dropdown.dataset.dropdown, item.dataset.value);
+                break;
+            case 'Escape': {
+                e.preventDefault();
+                this.closeAllPopups();
+                const trigger = this.toolbar.querySelector(`[data-dropdown-trigger="${dropdown.dataset.dropdown}"]`);
+                if (trigger) trigger.focus();
+                break;
+            }
+            case 'Tab':
+                this.closeAllPopups();
+                break;
         }
     }
 
@@ -2183,6 +2272,9 @@ class StarEditor {
         const prefix = this.config.classPrefix;
         this.toolbar.querySelectorAll(`.${prefix}-dropdown-open`).forEach(el => {
             el.classList.remove(`${prefix}-dropdown-open`);
+        });
+        this.toolbar.querySelectorAll('[data-dropdown-trigger][aria-expanded="true"]').forEach(btn => {
+            btn.setAttribute('aria-expanded', 'false');
         });
         this.toolbar.querySelectorAll(`.${prefix}-color-picker-open`).forEach(el => {
             el.classList.remove(`${prefix}-color-picker-open`);

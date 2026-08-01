@@ -5,6 +5,17 @@ All notable changes to StarEditor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.2] - 2026-08-01
+
+### Summary
+
+| Category | Description                                                                    |
+|----------|---------------------------------------------------------------------------------|
+| Fixed    | Heading, alignment, font size, and font family menus are now keyboard accessible |
+
+### Fixed
+- Heading, text alignment, font size, and font family menus in the toolbar can now be fully operated with the keyboard — arrow keys to move between options, Enter to choose one, and Escape to close the menu (closes #3).
+
 ## [3.2.1] - 2026-07-30
 
 ### Summary

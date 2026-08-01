@@ -118,6 +118,11 @@ The toolbar can no longer be customized from the host — there is no `toolbar` 
 [archive/toolbar-customization](../archive/toolbar-customization/README.md) for the removed
 per-host configuration this replaced.
 
+The `fontSize`, `fontName`, `heading`, and `alignment` dropdown menus are fully keyboard
+accessible: Tab to the trigger button and press Enter/Space to open it, Arrow Up/Down (or
+Home/End) to move between options, Enter/Space to select, and Escape to close and return focus
+to the trigger.
+
 ---
 
 ## Styling
