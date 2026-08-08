@@ -5,6 +5,19 @@ All notable changes to StarEditor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.3] - 2026-08-08
+
+### Summary
+
+| Category | Description                                                                 |
+|----------|------------------------------------------------------------------------------|
+| Fixed    | Stored content is now sanitized on load, not just on paste                  |
+| Fixed    | Documented which layer is responsible for style attribute CSS sanitization |
+
+### Fixed
+- Content loaded into the editor — on initial load, via `setContent()`, or when switching back from code view — now goes through the same dangerous-element and event-handler removal as pasted content. Previously only pasted content was sanitized, so a previously stored field containing a `<style>` tag, an `on*` event handler, or similar would render live in the browser unfiltered if the server-side storage layer hadn't sanitized it on write (closes #12).
+- Documented that filtering CSS inside `style=""` attribute values (e.g. `url()`/import-based data exfiltration) remains the responsibility of the consuming project's server-side sanitizer — StarEditor's client-side pass only removes dangerous tags and event handler attributes, not inline style content, to avoid breaking legitimate color/size/alignment formatting.
+
 ## [3.2.2] - 2026-08-01
 
 ### Summary

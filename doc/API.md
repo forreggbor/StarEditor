@@ -95,6 +95,8 @@ The editor keeps the underlying textarea in sync at all times. On form submissio
 
 ## Security
 
-The editor sanitizes pasted HTML by removing `<script>`, `<style>`, `<iframe>`, `<object>`, and `<embed>` elements, stripping all `on*` event handler attributes, and escaping URLs in inserted links.
+The editor sanitizes HTML by removing `<script>`, `<style>`, `<iframe>`, `<object>`, and `<embed>` elements, stripping all `on*` event handler attributes, and escaping URLs in inserted links. This runs on paste, on initial load, on `setContent()`, and when leaving code view — any point where HTML enters the live editor from outside the toolbar.
 
-**Client-side sanitization is for display only.** Always run a server-side HTML sanitizer (e.g. HTMLPurifier) before storing or rendering editor output.
+This sanitization is tag/attribute-level only. It does **not** filter `style=""` attribute values (needed for legitimate font size/color/alignment formatting) — CSS `url()`/`import` directives inside inline styles (a known exfiltration vector) are not stripped client-side.
+
+**Client-side sanitization is for display only.** Always run a server-side HTML sanitizer (e.g. HTMLPurifier) before storing or rendering editor output — including `style=""` attribute-level CSS filtering, which is the server-side sanitizer's responsibility.

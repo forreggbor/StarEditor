@@ -5,7 +5,7 @@
  * using native browser APIs (contenteditable, execCommand).
  *
  * @package StarEditor
- * @version 3.2.2
+ * @version 3.2.3
  * @license MIT
  */
 class StarEditor {
@@ -1291,9 +1291,12 @@ class StarEditor {
         this.buildCodeEditor();
         this.bindEvents();
 
-        // Set initial content from textarea (sanitize any embedded editor UI)
+        // Set initial content from textarea (sanitize any embedded editor UI,
+        // then dangerous elements/attributes — content loaded from storage gets
+        // the same defense-in-depth pass as pasted content)
         if (this.textarea.value) {
             this.editor.innerHTML = this.sanitizeEditorUI(this.textarea.value);
+            this.sanitizeContent();
         }
 
         // Font size / font family triggers need a real value as soon as the editor
@@ -2308,8 +2311,10 @@ class StarEditor {
                 }
             });
         } else {
-            // Switch back to WYSIWYG view (sanitize any embedded editor UI)
+            // Switch back to WYSIWYG view (sanitize any embedded editor UI,
+            // then dangerous elements/attributes the user may have hand-typed)
             this.editor.innerHTML = this.sanitizeEditorUI(this.codeEditor.value);
+            this.sanitizeContent();
             this.codeEditor.style.display = 'none';
             this.editor.style.display = 'block';
             this.editor.focus();
@@ -4282,7 +4287,16 @@ class StarEditor {
     }
 
     /**
-     * Sanitize the editor content (remove dangerous elements)
+     * Sanitize the editor content (remove dangerous elements). Runs on paste,
+     * on initial load (init()), on setContent(), and when leaving code view —
+     * any point where HTML enters the live DOM from outside the toolbar.
+     *
+     * Tag/attribute-level only: strips script/style/link/meta/iframe/object/embed
+     * elements and on* handlers. Does NOT touch style="" attribute values (used
+     * for legitimate font size/color/alignment formatting) — filtering CSS
+     * url()/import directives inside inline styles is the consuming project's
+     * server-side sanitizer's responsibility (e.g. HTMLPurifier), same as all
+     * other write-time content validation.
      * @private
      */
     sanitizeContent() {
@@ -4574,6 +4588,7 @@ class StarEditor {
      */
     setContent(html) {
         this.editor.innerHTML = this.sanitizeEditorUI(html);
+        this.sanitizeContent();
         if (this.isCodeView) {
             this.codeEditor.value = this.getCleanContent();
         }
