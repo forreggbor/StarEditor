@@ -5,7 +5,7 @@
  * using native browser APIs (contenteditable, execCommand).
  *
  * @package StarEditor
- * @version 3.2.3
+ * @version 3.2.4
  * @license MIT
  */
 class StarEditor {
@@ -1954,10 +1954,8 @@ class StarEditor {
 
         // Restore links that were removed by Safari
         if (links.length > 0) {
-            const updatedContent = this.editor.innerHTML;
             links.forEach(link => {
                 // Check if the link text still exists but is no longer wrapped in <a>
-                const escapedText = link.textContent.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 const linkExists = this.editor.querySelector(`a[href="${CSS.escape(link.href)}"]`);
                 if (!linkExists) {
                     // Find the text node and re-wrap it
@@ -3643,31 +3641,22 @@ class StarEditor {
 
         const img = this.selectedImage;
         const startX = e.clientX;
-        const startY = e.clientY;
         const startWidth = img.offsetWidth;
-        const startHeight = img.offsetHeight;
-        const aspectRatio = startWidth / startHeight;
 
         const onMouseMove = (moveEvent) => {
             let deltaX = moveEvent.clientX - startX;
-            let deltaY = moveEvent.clientY - startY;
 
             // Adjust delta based on handle position
             if (handle === 'nw' || handle === 'sw') {
                 deltaX = -deltaX;
             }
-            if (handle === 'nw' || handle === 'ne') {
-                deltaY = -deltaY;
-            }
 
-            // Calculate new size maintaining aspect ratio
+            // Calculate new size maintaining aspect ratio (height follows via CSS 'auto')
             let newWidth = startWidth + deltaX;
-            let newHeight = newWidth / aspectRatio;
 
             // Minimum size
             if (newWidth < 50) {
                 newWidth = 50;
-                newHeight = newWidth / aspectRatio;
             }
 
             // Apply new size
@@ -3993,7 +3982,6 @@ class StarEditor {
         const prefix = this.config.classPrefix;
 
         // Get current table styles
-        const computedStyle = window.getComputedStyle(table);
         const cells = table.querySelectorAll('td, th');
         const firstCell = cells[0];
         const cellStyle = firstCell ? window.getComputedStyle(firstCell) : null;

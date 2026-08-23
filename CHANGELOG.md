@@ -5,6 +5,17 @@ All notable changes to StarEditor will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.4] - 2026-08-23
+
+### Summary
+
+| Category | Description                                                |
+|----------|--------------------------------------------------------------|
+| Fixed    | Removed leftover unused internal code with no effect on behavior |
+
+### Fixed
+- Removed a handful of unused internal variables left over from earlier changes to link handling, image resizing, and the table properties dialog. No user-visible behavior changed (closes #10).
+
 ## [3.2.3] - 2026-08-08
 
 ### Summary
